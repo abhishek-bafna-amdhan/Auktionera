@@ -97,7 +97,8 @@ AuctionRequest:
         "startPrice" : 0,
         "buyoutPrice" : 0,
         "minBidStep" : 0,
-        "deliveryType" : enum:DeliveryType
+        "deliveryType" : enum:DeliveryType,
+        "images" : Image[]
     }
 
 Image:  {

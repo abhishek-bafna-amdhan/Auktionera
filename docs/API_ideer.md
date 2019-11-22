@@ -57,7 +57,16 @@ Auction:
             "tags" : ["string"],
             "seller" : User,
             "buyer" : User,
-            
+            "sellerReview" : Review,
+            "buyerReview" : Review,
+            "state" : någon enum: InProgress,EndedNotBought,EndedBought,
+            "createdAt" : Date,
+            "currentBidAt" : Date,
+            "endedAt" : Date,
+            "startPrice" : 0,
+            "buyoutPrice" : 0,
+            "currentBid" : 0,
+
         }
 
 ```

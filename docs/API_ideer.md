@@ -46,6 +46,10 @@ User:
         "id" : 0,
         "userName" : "string",
         "createdAt" : Date,
+    }
+
+UserStats:
+    {        
         "totalSales" : 0,
         "sellerRating" : 0,
         "buyerRating" : 0

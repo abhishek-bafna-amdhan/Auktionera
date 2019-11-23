@@ -1,0 +1,50 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: on_trace_param
+
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        boot:
+          web:
+            embedded:
+              tomcat:
+                TomcatWebServer: INFO
+
+
+    #org.springframework: WARN
+    #org.hibernate: ERROR
+    #org.springframework.web: ERROR
+    #org.springframework.security: ERROR
+#    org.springframework.boot.autoconfigure: DEBUG
+
+spring:
+  profiles:
+    active: noSecurity
+  jpa:
+    hibernate.ddl-auto: update
+    #generate-ddl: true
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/auktionera
+    username: root
+    password: root
+  security:
+    oauth2:
+      client:
+        registration:
+         # github:
+         #   client-id: ae47c90801a3456e293d
+         #   client-secret: 107bbde82e4d0db960e91f6370134a842416b22d
+          google:
+            client-id: 528021233727-868kei3rpsvjtjqifjqsus6vvrahl3co.apps.googleusercontent.com
+            client-secret: rIV88WN9EHq9roayPDVcpHlW
+  main:
+    banner-mode: off
+
+
+
+

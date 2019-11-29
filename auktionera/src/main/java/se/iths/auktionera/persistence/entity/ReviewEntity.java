@@ -3,8 +3,10 @@ package se.iths.auktionera.persistence.entity;
 import lombok.*;
 import se.iths.auktionera.business.model.User;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.Instant;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,11 +14,18 @@ import java.util.Date;
 @Builder
 public class ReviewEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long auctionId;
-    private User seller;
-    private User buyer;
-    private Date createdAt;
-    private Date lastEditAt;
+
+    @ManyToOne
+    private AccountEntity seller;
+
+    @ManyToOne
+    private AccountEntity buyer;
+
+    private Instant createdAt;
+    private Instant lastEditAt;
     private Double rating;
     private String reviewText;
 

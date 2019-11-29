@@ -35,8 +35,8 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User getUserById(String authId) {
-        AccountEntity accountEntity = accountRepo.findByAuthId(authId);
+    public User getUserById(String id) {
+        AccountEntity accountEntity = accountRepo.findByAuthId(id);
         User user = User.builder()
                 .id(accountEntity.getId())
                 .userName(accountEntity.getUserName())

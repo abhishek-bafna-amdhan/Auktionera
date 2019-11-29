@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,4 +33,9 @@ public class AccountEntity {
     private int postNr;
     private String city = StringUtils.EMPTY;
 
+    @OneToMany
+    private Set<AuctionEntity> auctionEntities = new HashSet<>();
+
+    @OneToMany
+    private Set<ReviewEntity> reviewEntities = new HashSet<>();
 }

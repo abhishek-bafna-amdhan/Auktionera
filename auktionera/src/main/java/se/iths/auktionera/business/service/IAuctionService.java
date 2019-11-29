@@ -8,5 +8,5 @@ import java.util.Map;
 public interface IAuctionService {
     List<Auction> getAuctions(Map<String, String> filters, Map<String, String> sorters);
 
-    List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId);
+    //List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId);
 }

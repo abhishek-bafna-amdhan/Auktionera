@@ -1,9 +1,6 @@
 package se.iths.auktionera.api.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.iths.auktionera.business.model.Auction;
 import se.iths.auktionera.business.model.User;
 import se.iths.auktionera.business.service.UserService;
@@ -27,8 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}")
-    public User getOneUser(HttpServletRequest request) {
-        return userService.getUserById((String)  request.getAttribute("authId"));
+    public User getOneUser(@PathVariable String id) {
+        return userService.getUserById(id);
     }
 
     @GetMapping("/api/users/{id}/auctions")

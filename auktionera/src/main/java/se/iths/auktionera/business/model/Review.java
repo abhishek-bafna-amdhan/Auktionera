@@ -3,7 +3,7 @@ package se.iths.auktionera.business.model;
 import lombok.*;
 import se.iths.auktionera.persistence.entity.ReviewEntity;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -15,8 +15,8 @@ public class Review {
     private Long auctionId;
     private User seller;
     private User buyer;
-    private Date createdAt;
-    private Date lastEditAt;
+    private Instant createdAt;
+    private Instant lastEditAt;
     private Double rating;
     private String reviewText;
 

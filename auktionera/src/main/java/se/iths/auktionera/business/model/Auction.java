@@ -3,7 +3,7 @@ package se.iths.auktionera.business.model;
 import lombok.*;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -14,17 +14,17 @@ import java.util.List;
 public class Auction {
 
     private long id;
-    private List<String> tags;
+    private String tags; //for the moment changed to String, should be changed into List or own Object
     private String description;
     private User seller;
     private User buyer;
     private Review sellerReview;
     private Review buyerReview;
     private AuctionState auctionState;
-    private Date endsAt;
-    private Date createdAt;
-    private Date currentBidAt;
-    private Date endedAt;
+    private Instant endsAt;
+    private Instant createdAt;
+    private Instant currentBidAt;
+    private Instant endedAt;
     private Integer startPrice;
     private Integer buyOutPrice;
     private Integer minBidStep;
@@ -57,7 +57,7 @@ public class Auction {
                 .lastEditAt(auctionEntity.getBuyerReview().getLastEditAt())
                 .rating(auctionEntity.getBuyerReview().getRating()).build();
 
-        this.auctionState = auctionEntity.getAuctionState();
+        this.auctionState = (AuctionState) auctionEntity.getAuctionState();
         this.endsAt = auctionEntity.getEndsAt();
         this.createdAt = auctionEntity.getCreatedAt();
         this.currentBidAt = auctionEntity.getCurrentBidAt();
@@ -66,7 +66,7 @@ public class Auction {
         this.buyOutPrice = auctionEntity.getBuyOutPrice();
         this.minBidStep = auctionEntity.getMinBidStep();
         this.currentBid = auctionEntity.getCurrentBid();
-        this.deliveryType = auctionEntity.getDeliveryType();
+        this.deliveryType = (DeliveryType) auctionEntity.getDeliveryType();
     }
 }
 

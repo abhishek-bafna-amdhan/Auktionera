@@ -12,11 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import se.iths.auktionera.business.model.User;
 import se.iths.auktionera.business.service.IUserService;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,11 +52,11 @@ class UserControllerTest {
 
     @Test
     void getOneUser(@Autowired MockMvc mvc) throws Exception {
-        User user = User.builder().id(1).userName("Corey").build();
+        User user = User.builder().id(1).userName("Corey").createdAt(Instant.now()).build();
 
-        when(userService.getUserById(anyString())).thenReturn(user);
+        when(userService.getUserById(anyLong())).thenReturn(user);
 
-        mvc.perform(get("/api/users/someId").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/users/1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'id':1, 'userName':'Corey'}"));

@@ -1,15 +1,11 @@
 package se.iths.auktionera.business.service;
 
 import org.springframework.stereotype.Service;
-import se.iths.auktionera.business.model.Account;
 import se.iths.auktionera.business.model.User;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
 
-import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService implements IUserService{
@@ -35,13 +31,14 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User getUserById(String id) {
-        AccountEntity accountEntity = accountRepo.findByAuthId(id);
-        User user = User.builder()
-                .id(accountEntity.getId())
-                .userName(accountEntity.getUserName())
-                .createdAt(accountEntity.getCreatedAt())
-                .build();
+    public User getUserById(Long id) {
+        Optional<AccountEntity> accountEntity = accountRepo.findById(id);
+        User user = new User();
+        accountEntity.ifPresent(entity -> {
+            user.setId(entity.getId());
+            user.setUserName(entity.getUserName());
+            user.setCreatedAt(entity.getCreatedAt());
+        });
         return user;
     }
 //

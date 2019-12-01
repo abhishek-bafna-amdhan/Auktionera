@@ -1,6 +1,7 @@
 package se.iths.auktionera.api.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.iths.auktionera.business.model.Auction;
@@ -21,5 +22,10 @@ public class AuctionController {
     @GetMapping("api/auctions")
     public List<Auction> getAuctions(@RequestParam Map<String, String> filter, @RequestParam Map<String, String> sort) {
         return auctionService.getAuctions(filter, sort);
+    }
+
+    @GetMapping("api/auctions/{id}")
+    public Auction getAuctionById(@PathVariable Long id) {
+        return auctionService.getAuctionById(id);
     }
 }

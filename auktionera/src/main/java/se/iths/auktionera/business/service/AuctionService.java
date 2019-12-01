@@ -9,6 +9,7 @@ import se.iths.auktionera.persistence.repo.AuctionRepo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuctionService implements IAuctionService {
@@ -23,10 +24,17 @@ public class AuctionService implements IAuctionService {
     public List<Auction> getAuctions(Map<String, String> filters, Map<String, String> sorters) {
         List<AuctionEntity> auctionsFound = auctionRepo.findAll();
         List<Auction> auctionsToReturn = new ArrayList<>();
-        for (int i = 0; i < auctionsFound.size(); i++) {
-            auctionsToReturn.add(new Auction(auctionsFound.get(i)));
+        for (AuctionEntity auctionEntity : auctionsFound) {
+            auctionsToReturn.add(new Auction(auctionEntity));
         }
         return auctionsToReturn;
+    }
+
+    @Override
+    public Auction getAuctionById(long id) {
+        Optional<AuctionEntity> optionalAuction = auctionRepo.findById(id);
+        AuctionEntity auctionEntity = optionalAuction.orElseThrow();
+        return new Auction(auctionEntity);
     }
 
 //    @Override

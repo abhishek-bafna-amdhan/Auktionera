@@ -24,11 +24,11 @@ public class UserService implements IUserService{
     public List<User> getUsers(Map<String, String> filters, Map<String, String> sorters) {
         List<AccountEntity> accountFound = accountRepo.findAll();
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < accountFound.size() ; i++) {
+        for (AccountEntity accountEntity : accountFound) {
             users.add(User.builder().
-                    id(accountFound.get(i).getId())
-                    .userName(accountFound.get(i).getUserName())
-                    .createdAt(accountFound.get(i).getCreatedAt())
+                    id(accountEntity.getId())
+                    .userName(accountEntity.getUserName())
+                    .createdAt(accountEntity.getCreatedAt())
                     .build());
         }
         return users;

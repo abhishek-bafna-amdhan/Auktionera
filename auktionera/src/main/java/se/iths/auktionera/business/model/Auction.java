@@ -1,6 +1,7 @@
 package se.iths.auktionera.business.model;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
 
 import java.time.Instant;
@@ -17,7 +18,10 @@ public class Auction {
     private String tags; //for the moment changed to String, should be changed into List or own Object
     private String description;
     private User seller;
+
+    @Nullable
     private User buyer;
+
     private Review sellerReview;
     private Review buyerReview;
     private AuctionState auctionState;

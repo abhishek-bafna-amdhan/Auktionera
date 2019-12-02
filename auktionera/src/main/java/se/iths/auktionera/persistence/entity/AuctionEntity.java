@@ -1,5 +1,6 @@
 package se.iths.auktionera.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import se.iths.auktionera.business.model.AuctionState;
 import se.iths.auktionera.business.model.DeliveryType;
@@ -42,6 +43,7 @@ public class AuctionEntity {
     @JoinColumn(name = "buyerReview_id")
     private ReviewEntity buyerReview;
     private Enum auctionState;
+
     private Instant endsAt;
     private Instant createdAt;
     private Instant currentBidAt;

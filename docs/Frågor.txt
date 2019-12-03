@@ -1,0 +1,4 @@
+1. Ska det finnas en tabell med user i db eller ska den gå via account?
+2. Kan du göra ett exempel på hur vi använder requestParam Map<string, string> för att sortera och filtrera
+i accountcontroller @GetMapping("api/account/auctions")
+3. Hur tänkte du med images? Hur/var ska vi spara dem?

@@ -1,11 +1,9 @@
 package se.iths.auktionera.business.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import se.iths.auktionera.api.config.InstantDeserializer;
 
 import java.time.Instant;
 import java.util.List;
@@ -14,12 +12,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class AuctionRequest {
-    // todo add the tags/category field and decide whether or not to make it a class
     private String tags;
     private String description;
 
-    @JsonDeserialize(using = InstantDeserializer.class)
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Instant endsAt;
 
     private int startPrice;

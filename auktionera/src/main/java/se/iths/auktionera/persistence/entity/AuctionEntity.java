@@ -1,15 +1,9 @@
 package se.iths.auktionera.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import se.iths.auktionera.business.model.AuctionState;
-import se.iths.auktionera.business.model.DeliveryType;
-import se.iths.auktionera.business.model.Review;
-import se.iths.auktionera.business.model.User;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Getter

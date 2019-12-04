@@ -2,15 +2,13 @@ package se.iths.auktionera.business.service;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import se.iths.auktionera.business.model.Auction;
-import se.iths.auktionera.business.model.AuctionRequest;
-import se.iths.auktionera.business.model.AuctionState;
-import se.iths.auktionera.business.model.User;
+import se.iths.auktionera.business.model.*;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
 import se.iths.auktionera.persistence.repo.AuctionRepo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +59,30 @@ public class AuctionService implements IAuctionService {
                 .deliveryType(auctionRequest.getDeliveryType()).build();
         auctionRepo.saveAndFlush(auctionToBeCreated);
         return new Auction(auctionToBeCreated);
+    }
+
+    @Override
+    public void deleteAuctionById(long id) {
+        auctionRepo.deleteById(id);
+        auctionRepo.flush();
+    }
+
+    @Override
+    public Auction addBidToAuction(Bid bid, Long id, HttpServletRequest request) {
+//        private Integer startPrice;
+//        private Integer buyOutPrice;
+//        private Integer minBidStep;
+//        private Integer currentBid;
+        Optional<AuctionEntity> optionalAuction = auctionRepo.findById(id);
+        AuctionEntity auctionEntity = optionalAuction.orElseThrow();
+        Auction auction = new Auction(auctionEntity);
+        if (bid.getBid() < auction.getStartPrice() ||
+                bid.getBid() <= auction.getMinBidStep()) throw new IllegalArgumentException("Cannot bid lower than startPrice");
+        else {
+            Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
+            AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
+            return new Auction(updatedAuction);
+        }
     }
 
 //    @Override

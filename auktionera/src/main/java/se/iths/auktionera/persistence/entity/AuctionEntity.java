@@ -1,14 +1,9 @@
 package se.iths.auktionera.persistence.entity;
 
 import lombok.*;
-import se.iths.auktionera.business.model.AuctionState;
-import se.iths.auktionera.business.model.DeliveryType;
-import se.iths.auktionera.business.model.Review;
-import se.iths.auktionera.business.model.User;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Getter
@@ -42,6 +37,7 @@ public class AuctionEntity {
     @JoinColumn(name = "buyerReview_id")
     private ReviewEntity buyerReview;
     private Enum auctionState;
+
     private Instant endsAt;
     private Instant createdAt;
     private Instant currentBidAt;

@@ -1,6 +1,7 @@
 package se.iths.auktionera.business.model;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
 
 import java.time.Instant;
@@ -17,7 +18,10 @@ public class Auction {
     private String tags; //for the moment changed to String, should be changed into List or own Object
     private String description;
     private User seller;
+
+    @Nullable
     private User buyer;
+
     private Review sellerReview;
     private Review buyerReview;
     private AuctionState auctionState;
@@ -40,22 +44,28 @@ public class Auction {
                 .userName(auctionEntity.getSeller().getUserName())
                 .createdAt(auctionEntity.getSeller().getCreatedAt()).build();
 
-        this.buyer = User.builder()
-                .id(auctionEntity.getBuyer().getId())
-                .userName(auctionEntity.getBuyer().getUserName())
-                .createdAt(auctionEntity.getBuyer().getCreatedAt()).build();
+        if (auctionEntity.getBuyer() != null) {
+            this.buyer = User.builder()
+                    .id(auctionEntity.getBuyer().getId())
+                    .userName(auctionEntity.getBuyer().getUserName())
+                    .createdAt(auctionEntity.getBuyer().getCreatedAt()).build();
+        }
 
-        this.sellerReview = Review.builder().auctionId(auctionEntity.getId()).seller(this.seller)
-                .reviewText(auctionEntity.getSellerReview().getReviewText())
-                .buyer(this.buyer).createdAt(auctionEntity.getCreatedAt())
-                .lastEditAt(auctionEntity.getSellerReview().getLastEditAt())
-                .rating(auctionEntity.getSellerReview().getRating()).build();
+        if (auctionEntity.getSellerReview() != null) {
+            this.sellerReview = Review.builder().auctionId(auctionEntity.getId()).seller(this.seller)
+                    .reviewText(auctionEntity.getSellerReview().getReviewText())
+                    .buyer(this.buyer).createdAt(auctionEntity.getCreatedAt())
+                    .lastEditAt(auctionEntity.getSellerReview().getLastEditAt())
+                    .rating(auctionEntity.getSellerReview().getRating()).build();
+        }
 
-        this.buyerReview = Review.builder().auctionId(auctionEntity.getId()).buyer(this.buyer)
-                .reviewText(auctionEntity.getBuyerReview().getReviewText())
-                .seller(this.seller).createdAt(auctionEntity.getCreatedAt())
-                .lastEditAt(auctionEntity.getBuyerReview().getLastEditAt())
-                .rating(auctionEntity.getBuyerReview().getRating()).build();
+        if (auctionEntity.getBuyerReview() != null) {
+            this.buyerReview = Review.builder().auctionId(auctionEntity.getId()).buyer(this.buyer)
+                    .reviewText(auctionEntity.getBuyerReview().getReviewText())
+                    .seller(this.seller).createdAt(auctionEntity.getCreatedAt())
+                    .lastEditAt(auctionEntity.getBuyerReview().getLastEditAt())
+                    .rating(auctionEntity.getBuyerReview().getRating()).build();
+        }
 
         this.auctionState = (AuctionState) auctionEntity.getAuctionState();
         this.endsAt = auctionEntity.getEndsAt();

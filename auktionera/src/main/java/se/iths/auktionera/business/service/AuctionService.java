@@ -8,12 +8,8 @@ import se.iths.auktionera.persistence.entity.AuctionEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
 import se.iths.auktionera.persistence.repo.AuctionRepo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuctionService implements IAuctionService {
@@ -68,7 +64,7 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public Auction addBidToAuction(Bid bid, Long id, HttpServletRequest request) {
+    public Auction addBidToAuction(Bid bid, Long id, String authId) {
 //        private Integer startPrice;
 //        private Integer buyOutPrice;
 //        private Integer minBidStep;
@@ -76,10 +72,20 @@ public class AuctionService implements IAuctionService {
         Optional<AuctionEntity> optionalAuction = auctionRepo.findById(id);
         AuctionEntity auctionEntity = optionalAuction.orElseThrow();
         Auction auction = new Auction(auctionEntity);
+        AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         if (bid.getBid() < auction.getStartPrice() ||
-                bid.getBid() <= auction.getMinBidStep()) throw new IllegalArgumentException("Cannot bid lower than startPrice");
+                bid.getBid() <= auction.getCurrentBid()) throw new IllegalArgumentException("Cannot bid lower than start price and current bid.");
         else {
+            if (bid.getBid() == auction.getBuyOutPrice()) {
+                Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
+                Optional.of(acc).ifPresent(auctionEntity::setBuyer);
+                auctionEntity.setEndedAt(Instant.now());
+                auctionEntity.setAuctionState(AuctionState.ENDEDBOUGHT);
+                AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
+                return new Auction(updatedAuction);
+            }
             Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
+            auctionEntity.setCurrentBidAt(Instant.now());
             AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
             return new Auction(updatedAuction);
         }

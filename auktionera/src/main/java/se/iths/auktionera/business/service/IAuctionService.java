@@ -4,7 +4,6 @@ import se.iths.auktionera.business.model.Auction;
 import se.iths.auktionera.business.model.AuctionRequest;
 import se.iths.auktionera.business.model.Bid;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,6 @@ public interface IAuctionService {
 
     void deleteAuctionById(long id);
 
-    Auction addBidToAuction(Bid bid, Long id, HttpServletRequest request);
+    Auction addBidToAuction(Bid bid, Long id, String authId);
     //List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId);
 }

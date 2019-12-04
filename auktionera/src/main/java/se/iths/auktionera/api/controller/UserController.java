@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}/auctions")
-    public List<Auction> getAuctionsByUser(@RequestParam Map<String, String> filter, @RequestParam Map<String, String> sort, HttpServletRequest request, @PathVariable String id) {
-        return null;
+    public List<Auction> getAuctionsByUser(@RequestParam Map<String, String> filter, @RequestParam Map<String, String> sort, HttpServletRequest request, @PathVariable Long id) {
+        return userService.getAuctionsByUser(filter, sort, id);
     }
 }

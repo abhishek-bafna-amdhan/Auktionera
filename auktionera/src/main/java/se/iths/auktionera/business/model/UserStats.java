@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class UserStats {
     private int totalSales;
+    private int totalPurchases;
     private float sellerRating;
     private float buyerRating;
 }

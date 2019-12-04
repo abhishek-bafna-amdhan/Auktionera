@@ -1,9 +1,12 @@
 package se.iths.auktionera.business.service;
 
 import org.springframework.stereotype.Service;
+import se.iths.auktionera.business.model.Auction;
 import se.iths.auktionera.business.model.User;
 import se.iths.auktionera.persistence.entity.AccountEntity;
+import se.iths.auktionera.persistence.entity.AuctionEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
+import se.iths.auktionera.persistence.repo.AuctionRepo;
 
 import java.util.*;
 
@@ -11,9 +14,11 @@ import java.util.*;
 public class UserService implements IUserService{
 
     private final AccountRepo accountRepo;
+    private final AuctionRepo auctionRepo;
 
-    public UserService(AccountRepo accountRepo) {
+    public UserService(AccountRepo accountRepo, AuctionRepo auctionRepo) {
         this.accountRepo = accountRepo;
+        this.auctionRepo = auctionRepo;
     }
 
     @Override
@@ -41,19 +46,16 @@ public class UserService implements IUserService{
         });
         return user;
     }
-//
-//    @Override
-//    public List<User> getAuctionsByUser(Map<String, String> filters, Map<String, String> sorters, String authId) {
-//        List<AccountEntity> accountEntities = accountRepo.findAllById();
-//        List<User> users = new ArrayList<>();
-//        for (int i = 0; i < accountFound.size() ; i++) {
-//            users.add(User.builder().
-//                    id(accountFound.get(i).getId())
-//                    .userName(accountFound.get(i).getUserName())
-//                    .createdAt(accountFound.get(i).getCreatedAt())
-//                    .build());
-//        }
-//        return users;
 
+    @Override
+    public List<Auction> getAuctionsByUser(Map<String, String> filters, Map<String, String> sorters, Long id) {
+        User user = getUserById(id);
+        List<AuctionEntity> auctionEntities = auctionRepo.findAllById(Collections.singleton(user.getId()));
+        List<Auction> auctions = new ArrayList<>();
+        for (AuctionEntity auctionEntity : auctionEntities) {
+            auctions.add(new Auction(auctionEntity));
+        }
+        return auctions;
+    }
 
 }

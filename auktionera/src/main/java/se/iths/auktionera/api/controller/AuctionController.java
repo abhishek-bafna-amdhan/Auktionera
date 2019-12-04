@@ -36,7 +36,7 @@ public class AuctionController {
 
     @PostMapping("api/auctions/{id}/bid")
     public Auction createBid(@RequestBody Bid bid, @PathVariable Long id, HttpServletRequest request) {
-        return auctionService.addBidToAuction(bid, id, request);
+        return auctionService.addBidToAuction(bid, id, (String) request.getAttribute("authId"));
     }
 
     @DeleteMapping("api/auctions/{id}")

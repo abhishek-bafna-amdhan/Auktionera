@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
+@Table(name = "auctions")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -24,7 +24,7 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public List<Auction> getAuctions(Map<String, String> filters, Map<String, String> sorters) {
-        List<AuctionEntity> auctionsFound = auctionRepo.findAll();
+        List<AuctionEntity> auctionsFound = auctionRepo.findAllByAuctionState(AuctionState.INPROGRESS);
         List<Auction> auctionsToReturn = new ArrayList<>();
         for (AuctionEntity auctionEntity : auctionsFound) {
             auctionsToReturn.add(new Auction(auctionEntity));

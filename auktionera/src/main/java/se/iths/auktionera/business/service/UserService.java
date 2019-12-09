@@ -49,10 +49,14 @@ public class UserService implements IUserService{
 
     @Override
     public List<Auction> getAuctionsByUser(Map<String, String> filters, Map<String, String> sorters, Long id) {
-        User user = getUserById(id);
-        List<AuctionEntity> auctionEntities = auctionRepo.findAllById(Collections.singleton(user.getId()));
+        Optional<AccountEntity> entityOptional = accountRepo.findById(id);
+        AccountEntity entity = new AccountEntity();
+        if (entityOptional.isPresent()) {
+            entity = entityOptional.get();
+        }
+        List<AuctionEntity> auctionEntityList = auctionRepo.findAuctionsBySeller(entity);
         List<Auction> auctions = new ArrayList<>();
-        for (AuctionEntity auctionEntity : auctionEntities) {
+        for (AuctionEntity auctionEntity : auctionEntityList) {
             auctions.add(new Auction(auctionEntity));
         }
         return auctions;

@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 public class Review {
 
-    private Long auctionId;
+    private Long reviewId;
     private User seller;
     private User buyer;
     private Instant createdAt;
@@ -21,16 +21,18 @@ public class Review {
     private String reviewText;
 
     public Review(ReviewEntity reviewEntity) {
-        this.auctionId = reviewEntity.getAuctionId();
+        this.reviewId = reviewEntity.getReviewId();
         this.seller = User.builder()
                 .id(reviewEntity.getSeller().getId())
                 .userName(reviewEntity.getSeller().getUserName())
                 .createdAt(reviewEntity.getSeller().getCreatedAt()).build();
 
-        this.buyer = User.builder()
-                .id(reviewEntity.getBuyer().getId())
-                .userName(reviewEntity.getBuyer().getUserName())
-                .createdAt(reviewEntity.getBuyer().getCreatedAt()).build();
+        if (reviewEntity.getBuyer() != null) {
+            this.buyer = User.builder()
+                    .id(reviewEntity.getBuyer().getId())
+                    .userName(reviewEntity.getBuyer().getUserName())
+                    .createdAt(reviewEntity.getBuyer().getCreatedAt()).build();
+        }
 
         this.createdAt = reviewEntity.getCreatedAt();
         this.lastEditAt = reviewEntity.getLastEditAt();

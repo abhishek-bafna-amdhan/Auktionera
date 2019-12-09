@@ -5,7 +5,6 @@ import org.springframework.lang.Nullable;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
 
 import java.time.Instant;
-import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import java.util.List;
 @Builder
 public class Auction {
 
-    private long id;
+    private long auctionId;
     private String tags; //for the moment changed to String, should be changed into List or own Object
     private String description;
     private User seller;
@@ -36,7 +35,7 @@ public class Auction {
     private DeliveryType deliveryType;
 
     public Auction(AuctionEntity auctionEntity) {
-        this.id = auctionEntity.getId();
+        this.auctionId = auctionEntity.getAuctionId();
         this.tags = auctionEntity.getTags();
         this.description = auctionEntity.getDescription();
         this.seller = User.builder()
@@ -52,7 +51,7 @@ public class Auction {
         }
 
         if (auctionEntity.getSellerReview() != null) {
-            this.sellerReview = Review.builder().auctionId(auctionEntity.getId()).seller(this.seller)
+            this.sellerReview = Review.builder().reviewId(auctionEntity.getAuctionId()).seller(this.seller)
                     .reviewText(auctionEntity.getSellerReview().getReviewText())
                     .buyer(this.buyer).createdAt(auctionEntity.getCreatedAt())
                     .lastEditAt(auctionEntity.getSellerReview().getLastEditAt())
@@ -60,7 +59,7 @@ public class Auction {
         }
 
         if (auctionEntity.getBuyerReview() != null) {
-            this.buyerReview = Review.builder().auctionId(auctionEntity.getId()).buyer(this.buyer)
+            this.buyerReview = Review.builder().reviewId(auctionEntity.getAuctionId()).buyer(this.buyer)
                     .reviewText(auctionEntity.getBuyerReview().getReviewText())
                     .seller(this.seller).createdAt(auctionEntity.getCreatedAt())
                     .lastEditAt(auctionEntity.getBuyerReview().getLastEditAt())

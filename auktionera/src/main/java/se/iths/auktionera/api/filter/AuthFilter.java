@@ -14,7 +14,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         Principal userPrincipal = httpServletRequest.getUserPrincipal();
         if (userPrincipal==null) {
-            httpServletRequest.setAttribute("authId","TestUser");
+            httpServletRequest.setAttribute("authId","OtherUser");
         }else {
            httpServletRequest.setAttribute("authId",userPrincipal.getName());
         }

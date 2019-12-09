@@ -16,8 +16,9 @@ import java.time.Instant;
 public class ReviewEntity {
 
     @Id
+    @Column(name = "reviewId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long auctionId;
+    private Long reviewId;
 
     @ManyToOne
     private AccountEntity seller;

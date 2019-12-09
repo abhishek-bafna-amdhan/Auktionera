@@ -15,7 +15,7 @@
 | DELETE ok| /api/auctions/{id}        |                                             | Seller can remove if no bids | Auction   |
 | POST  ok| /api/auctions             | BODY: Auction                               |                              | Auction   |
 | POST  ok| /api/auctions/{id}/bid    | BODY: Bid                                   |                              | Auction   |
-| POST   | /api/auctions/{id}/review | BODY: Review                                | Add review.                  | Auction   |
+| POST  ok| /api/auctions/{id}/review | BODY: Review                                | Add review.                  | Auction   |
 | PUT    | /api/auctions/{id}/review | BODY: Review                                | Edit review.                 | Auction   |
 
 ```json

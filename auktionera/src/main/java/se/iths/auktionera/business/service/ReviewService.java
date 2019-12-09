@@ -26,11 +26,9 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public Review createReview(ReviewRequest incomingReview, Long id) {
+    public Review createSellerReview(ReviewRequest incomingReview, Long id) {
         Optional<AuctionEntity> entityOptional = auctionRepo.findById(id);
         AuctionEntity auctionEntity = new AuctionEntity();
-//        Optional<AccountEntity> accountOptional = accountRepo.findById(auctionEntity.getSeller().getId());
-//        AccountEntity accountEntity = accountOptional.get();
         if (entityOptional.isPresent()) auctionEntity = entityOptional.get();
         ReviewEntity reviewToSave = ReviewEntity.builder()
                 .seller(auctionEntity.getSeller())
@@ -45,9 +43,33 @@ public class ReviewService implements IReviewService {
         auctionEntity.setSellerReview(reviewToSave);
         auctionEntity.getSeller().getReviewEntities().add(reviewToSave);
         auctionRepo.saveAndFlush(auctionEntity);
-
-//        accountEntity.getReviewEntities().add(reviewToSave);
-//        accountRepo.saveAndFlush(accountEntity);
         return new Review(reviewToSave);
+    }
+
+    @Override
+    public Review createBuyerReview(ReviewRequest incomingReview, Long id) {
+        Optional<AuctionEntity> entityOptional = auctionRepo.findById(id);
+        AuctionEntity auctionEntity = new AuctionEntity();
+        if (entityOptional.isPresent()) auctionEntity = entityOptional.get();
+        ReviewEntity reviewToSave = ReviewEntity.builder()
+                .seller(auctionEntity.getSeller())
+                .buyer(auctionEntity.getBuyer())
+                .reviewText(incomingReview.getReviewText())
+                .rating(incomingReview.getRating())
+                .createdAt(Instant.now())
+                .lastEditAt(Instant.now())
+                .build();
+
+        reviewRepo.saveAndFlush(reviewToSave);
+        auctionEntity.setBuyerReview(reviewToSave);
+        auctionEntity.getBuyer().getReviewEntities().add(reviewToSave);
+        auctionRepo.saveAndFlush(auctionEntity);
+        return new Review(reviewToSave);
+    }
+
+    @Override
+    public void checkAccountAgainstSellerId(ReviewRequest reviewRequest, Long id) {
+        if (reviewRequest.isBuyer()) createSellerReview(reviewRequest, id);
+        else createBuyerReview(reviewRequest, id);
     }
 }

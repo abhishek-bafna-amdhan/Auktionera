@@ -46,7 +46,7 @@ public class AuctionController {
     }
 
     @PostMapping("api/auctions/{id}/review")
-    public Review createReview(@RequestBody ReviewRequest reviewRequest, @PathVariable Long id){
-        return reviewService.createReview(reviewRequest, id);
+    public void createReview(@RequestBody ReviewRequest reviewRequest, @PathVariable Long id){
+        reviewService.checkAccountAgainstSellerId(reviewRequest, id);
     }
 }

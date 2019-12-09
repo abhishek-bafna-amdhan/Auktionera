@@ -53,16 +53,14 @@ public class Auction {
         if (auctionEntity.getSellerReview() != null) {
             this.sellerReview = Review.builder().reviewId(auctionEntity.getAuctionId()).seller(this.seller)
                     .reviewText(auctionEntity.getSellerReview().getReviewText())
-                    .buyer(this.buyer).createdAt(auctionEntity.getCreatedAt())
-                    .lastEditAt(auctionEntity.getSellerReview().getLastEditAt())
+                    .buyer(this.buyer)
                     .rating(auctionEntity.getSellerReview().getRating()).build();
         }
 
         if (auctionEntity.getBuyerReview() != null) {
             this.buyerReview = Review.builder().reviewId(auctionEntity.getAuctionId()).buyer(this.buyer)
                     .reviewText(auctionEntity.getBuyerReview().getReviewText())
-                    .seller(this.seller).createdAt(auctionEntity.getCreatedAt())
-                    .lastEditAt(auctionEntity.getBuyerReview().getLastEditAt())
+                    .seller(this.seller)
                     .rating(auctionEntity.getBuyerReview().getRating()).build();
         }
 

@@ -14,4 +14,6 @@ public class ReviewRequest {
     private String reviewText;
     private Instant createdAt;
     private Instant lastEditAt;
+    private boolean isSeller;
+    private boolean isBuyer;
 }

@@ -18,7 +18,7 @@ public class AuctionEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String tags;
     private String description;
 

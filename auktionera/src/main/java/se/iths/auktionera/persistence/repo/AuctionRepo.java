@@ -12,5 +12,4 @@ public interface AuctionRepo extends JpaRepository<AuctionEntity, Long>, JpaSpec
 
     List<AuctionEntity> findAllByAuctionState(Enum auctionState);
 
-
 }

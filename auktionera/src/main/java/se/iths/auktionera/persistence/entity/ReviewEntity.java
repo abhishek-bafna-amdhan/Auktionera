@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
+@Table(name = "reviews")
 @Getter
 @Setter
 @NoArgsConstructor

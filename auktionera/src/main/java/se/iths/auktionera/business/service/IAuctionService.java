@@ -17,5 +17,6 @@ public interface IAuctionService {
     void deleteAuctionById(long id);
 
     Auction addBidToAuction(Bid bid, Long id, String authId);
-    //List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId);
+
+    List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId);
 }

@@ -5,10 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "accounts")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,7 +37,7 @@ public class AccountEntity {
     private String city = StringUtils.EMPTY;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<AuctionEntity> auctionEntities = new HashSet<>();
+    private List<AuctionEntity> auctionEntities = new ArrayList<>();
 
     @OneToMany
     private Set<ReviewEntity> reviewEntities = new HashSet<>();

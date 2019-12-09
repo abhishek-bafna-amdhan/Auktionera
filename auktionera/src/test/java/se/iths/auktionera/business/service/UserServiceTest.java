@@ -7,6 +7,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import se.iths.auktionera.business.model.User;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
+import se.iths.auktionera.persistence.repo.AuctionRepo;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ class UserServiceTest {
 
     @MockBean
     AccountRepo accountRepo;
+    AuctionRepo auctionRepo;
 
     private IUserService userService;
     private AccountEntity entity1, entity2;
@@ -30,7 +32,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(accountRepo);
+        userService = new UserService(accountRepo, auctionRepo);
         entity1 = AccountEntity.builder()
                 .id(10)
                 .anonymousBuyer(false)

@@ -79,5 +79,6 @@ class AuctionServiceTest {
         assertNotNull(auctionAdded);
         assertThat(auctionAdded.getDescription(), is("Electronics"));
         assertThat(auctionAdded.getStartPrice(), is(100));
+        assertThat(auctionAdded.getSeller().getId(), is(10L));
     }
 }

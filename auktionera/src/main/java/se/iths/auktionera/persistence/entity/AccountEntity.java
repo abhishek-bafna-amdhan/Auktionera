@@ -33,7 +33,7 @@ public class AccountEntity {
     private int postNr;
     private String city = StringUtils.EMPTY;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<AuctionEntity> auctionEntities = new HashSet<>();
 
     @OneToMany

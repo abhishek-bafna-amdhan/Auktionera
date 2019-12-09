@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.iths.auktionera.business.model.Auction;
 import se.iths.auktionera.business.model.AuctionRequest;
+import se.iths.auktionera.business.model.AuctionState;
 import se.iths.auktionera.business.model.DeliveryType;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
@@ -13,11 +14,14 @@ import se.iths.auktionera.persistence.repo.AccountRepo;
 import se.iths.auktionera.persistence.repo.AuctionRepo;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -30,12 +34,14 @@ class AuctionServiceTest {
     AccountRepo accountRepo;
 
     private IAuctionService auctionService;
-    private AuctionEntity auctionEntity;
+    private AuctionEntity auctionEntity1;
     private AuctionRequest auctionRequest;
     private AccountEntity accountEntity;
+    private List<AuctionEntity> auctions = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
+
         auctionService = new AuctionService(auctionRepo, accountRepo);
         accountEntity = AccountEntity.builder()
                 .id(10)
@@ -49,7 +55,7 @@ class AuctionServiceTest {
                 .createdAt(Instant.now())
                 .build();
 
-        auctionEntity = AuctionEntity.builder()
+        auctionEntity1 = AuctionEntity.builder()
                 .seller(accountEntity)
                 .description("Laptop")
                 .tags("Electronics")
@@ -57,6 +63,19 @@ class AuctionServiceTest {
                 .startPrice(100)
                 .buyOutPrice(200)
                 .minBidStep(10)
+                .auctionState(AuctionState.INPROGRESS)
+                .deliveryType(DeliveryType.PICKUPATADDRESS)
+                .build();
+
+        AuctionEntity auctionEntity2 = AuctionEntity.builder()
+                .seller(accountEntity)
+                .description("Nikes")
+                .tags("Shoes")
+                .endsAt(Instant.parse("2019-12-13T10:15:30Z"))
+                .startPrice(1000)
+                .buyOutPrice(2000)
+                .minBidStep(100)
+                .auctionState(AuctionState.ENDEDBOUGHT)
                 .deliveryType(DeliveryType.PICKUPATADDRESS)
                 .build();
 
@@ -68,6 +87,18 @@ class AuctionServiceTest {
         auctionRequest.setBuyoutPrice(200);
         auctionRequest.setMinBidStep(10);
         auctionRequest.setDeliveryType(DeliveryType.PICKUPATADDRESS);
+
+        auctions.add(auctionEntity1);
+        //auctions.add(auctionEntity2);
+    }
+
+    @Test
+    void shouldReturnAuctionsInProgress() {
+        when(auctionRepo.findAllByAuctionState(any())).thenReturn(auctions);
+
+        List<Auction> ongoingAuctions = auctionService.getAuctions(null, null);
+        assertThat(ongoingAuctions.size(), is(1));
+        assertThat(ongoingAuctions.get(0).getAuctionState(), is(AuctionState.INPROGRESS));
     }
 
     @Test

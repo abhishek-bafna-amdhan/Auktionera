@@ -1,10 +1,9 @@
 package se.iths.auktionera.api.controller;
 
 import org.springframework.web.bind.annotation.*;
-import se.iths.auktionera.business.model.Auction;
-import se.iths.auktionera.business.model.AuctionRequest;
-import se.iths.auktionera.business.model.Bid;
+import se.iths.auktionera.business.model.*;
 import se.iths.auktionera.business.service.IAuctionService;
+import se.iths.auktionera.business.service.IReviewService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -14,9 +13,11 @@ import java.util.Map;
 public class AuctionController {
 
     private final IAuctionService auctionService;
+    private final IReviewService reviewService;
 
-    public AuctionController(IAuctionService auctionService) {
+    public AuctionController(IAuctionService auctionService, IReviewService reviewService) {
         this.auctionService = auctionService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("api/auctions")
@@ -42,5 +43,10 @@ public class AuctionController {
     @DeleteMapping("api/auctions/{id}")
     public void deleteAuction(@PathVariable Long id) {
         auctionService.deleteAuctionById(id);
+    }
+
+    @PostMapping("api/auctions/{id}/review")
+    public void createReview(@RequestBody ReviewRequest reviewRequest, @PathVariable Long id){
+        reviewService.checkAccountAgainstSellerId(reviewRequest, id);
     }
 }

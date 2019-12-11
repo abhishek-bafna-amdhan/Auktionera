@@ -54,6 +54,8 @@ public class AuctionService implements IAuctionService {
                 .minBidStep(auctionRequest.getMinBidStep())
                 .deliveryType(auctionRequest.getDeliveryType()).build();
         auctionRepo.saveAndFlush(auctionToBeCreated);
+        seller.getAuctionEntities().add(auctionToBeCreated);
+        accountRepo.saveAndFlush(seller);
         return new Auction(auctionToBeCreated);
     }
 
@@ -91,11 +93,17 @@ public class AuctionService implements IAuctionService {
         }
     }
 
-//    @Override
-//    public List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId) {
-//        auctionRepo.findAuctionByAuthId(authId);
-//        return null;
-//    }
+    @Override
+    public List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId) {
+        AccountEntity accountEntity = accountRepo.findByAuthId(authId);
+        List<AuctionEntity> auctionsFound = accountEntity.getAuctionEntities();
+        List<Auction> auctionsToReturn = new ArrayList<>();
+        for (AuctionEntity auctionEntity : auctionsFound) {
+            auctionsToReturn.add(new Auction(auctionEntity));
+            System.out.println(auctionEntity.getDescription());
+        }
+        return auctionsToReturn;
+    }
 
     private Sort orderBy(Map<String, String> sorters) {
         return null;

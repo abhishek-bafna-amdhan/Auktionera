@@ -15,10 +15,11 @@ import java.time.Instant;
 public class AuctionEntity {
 
     @Id
+    @Column(name = "auctionId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long auctionId;
 
-    @Column(unique = true, nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String tags;
     private String description;
 

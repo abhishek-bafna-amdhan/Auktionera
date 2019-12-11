@@ -34,8 +34,8 @@ public class AccountController {
         return accountService.updateAccount((String) request.getAttribute("authId"), fields);
     }
 
-/*    @GetMapping("api/account/auctions")
+    @GetMapping("api/account/auctions")
     public List<Auction> getAllAuctionsForAccount(@RequestParam Map<String, String> filter, @RequestParam Map<String, String> sort, HttpServletRequest request) {
         return auctionService.getAuctionsForOneAccount(filter, sort, (String) request.getAttribute("authId"));
-    }*/
+    }
 }

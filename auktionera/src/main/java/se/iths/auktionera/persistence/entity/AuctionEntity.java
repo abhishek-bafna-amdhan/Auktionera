@@ -15,9 +15,8 @@ import java.time.Instant;
 public class AuctionEntity {
 
     @Id
-    @Column(name = "auctionId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long auctionId;
+    private long id;
 
     @Column(nullable = false, updatable = false)
     private String tags;

@@ -41,8 +41,8 @@ public class AuctionController {
     }
 
     @DeleteMapping("api/auctions/{id}")
-    public void deleteAuction(@PathVariable Long id) {
-        auctionService.deleteAuctionById(id);
+    public void deleteAuction(@PathVariable Long id, HttpServletRequest request) {
+        auctionService.deleteAuctionById(id, (String) request.getAttribute("authId"));
     }
 
     @PostMapping("api/auctions/{id}/review")

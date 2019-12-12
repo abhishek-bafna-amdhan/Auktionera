@@ -14,7 +14,7 @@ public interface IAuctionService {
 
     Auction createAuction(String authId, AuctionRequest auctionRequest);
 
-    void deleteAuctionById(long id);
+    void deleteAuctionById(Long id, String authId);
 
     Auction addBidToAuction(Bid bid, Long id, String authId);
 

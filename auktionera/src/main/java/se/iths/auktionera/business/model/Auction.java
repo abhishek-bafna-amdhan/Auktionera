@@ -35,7 +35,7 @@ public class Auction {
     private DeliveryType deliveryType;
 
     public Auction(AuctionEntity auctionEntity) {
-        this.auctionId = auctionEntity.getAuctionId();
+        this.auctionId = auctionEntity.getId();
         this.tags = auctionEntity.getTags();
         this.description = auctionEntity.getDescription();
         this.seller = User.builder()
@@ -51,14 +51,14 @@ public class Auction {
         }
 
         if (auctionEntity.getSellerReview() != null) {
-            this.sellerReview = Review.builder().reviewId(auctionEntity.getAuctionId()).seller(this.seller)
+            this.sellerReview = Review.builder().reviewId(auctionEntity.getId()).seller(this.seller)
                     .reviewText(auctionEntity.getSellerReview().getReviewText())
                     .buyer(this.buyer)
                     .rating(auctionEntity.getSellerReview().getRating()).build();
         }
 
         if (auctionEntity.getBuyerReview() != null) {
-            this.buyerReview = Review.builder().reviewId(auctionEntity.getAuctionId()).buyer(this.buyer)
+            this.buyerReview = Review.builder().reviewId(auctionEntity.getId()).buyer(this.buyer)
                     .reviewText(auctionEntity.getBuyerReview().getReviewText())
                     .seller(this.seller)
                     .rating(auctionEntity.getBuyerReview().getRating()).build();

@@ -60,7 +60,11 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public void deleteAuctionById(long id) {
+    public void deleteAuctionById(Long id, String authId) {
+        AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow();
+        AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
+        acc.getAuctionEntities().remove(auctionEntity);
+        accountRepo.saveAndFlush(acc);
         auctionRepo.deleteById(id);
         auctionRepo.flush();
     }
@@ -76,7 +80,8 @@ public class AuctionService implements IAuctionService {
         Auction auction = new Auction(auctionEntity);
         AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         if (bid.getBid() < auction.getStartPrice() ||
-                bid.getBid() <= auction.getCurrentBid()) throw new IllegalArgumentException("Cannot bid lower than start price and current bid.");
+                bid.getBid() <= auction.getCurrentBid()) throw new IllegalArgumentException("Cannot bid lower than start price: " +
+                auction.getStartPrice() + " and current bid: " + auction.getCurrentBid());
         else {
             if (bid.getBid() == auction.getBuyOutPrice()) {
                 Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);

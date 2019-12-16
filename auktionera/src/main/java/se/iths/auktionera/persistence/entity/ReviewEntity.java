@@ -5,6 +5,7 @@ import se.iths.auktionera.business.model.User;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "reviews")
@@ -25,6 +26,9 @@ public class ReviewEntity {
 
     @ManyToOne
     private AccountEntity buyer;
+
+    @ManyToMany(mappedBy = "reviews")
+    private List<AuctionEntity> auctions;
 
     private Instant createdAt;
     private Instant lastEditAt;

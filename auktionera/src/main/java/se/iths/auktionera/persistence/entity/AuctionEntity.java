@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "auctions")
@@ -15,9 +16,8 @@ import java.time.Instant;
 public class AuctionEntity {
 
     @Id
-    @Column(name = "auctionId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long auctionId;
+    private long id;
 
     @Column(nullable = false, updatable = false)
     private String tags;
@@ -31,13 +31,12 @@ public class AuctionEntity {
     @JoinColumn(name = "buyer_id")
     private AccountEntity buyer;
 
-    @OneToOne
-    @JoinColumn(name = "sellerReview_id")
-    private ReviewEntity sellerReview;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "review_id",
+    joinColumns = { @JoinColumn(name = "auction_id")},
+    inverseJoinColumns = {@JoinColumn(name = "review_id")})
+    private List<ReviewEntity> reviews;
 
-    @OneToOne
-    @JoinColumn(name = "buyerReview_id")
-    private ReviewEntity buyerReview;
     private Enum auctionState;
 
     private Instant endsAt;

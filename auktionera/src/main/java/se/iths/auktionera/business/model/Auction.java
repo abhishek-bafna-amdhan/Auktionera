@@ -3,8 +3,11 @@ package se.iths.auktionera.business.model;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
+import se.iths.auktionera.persistence.entity.ReviewEntity;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,8 +24,7 @@ public class Auction {
     @Nullable
     private User buyer;
 
-    private Review sellerReview;
-    private Review buyerReview;
+    private List<Review> reviews = new ArrayList<>();
     private AuctionState auctionState;
     private Instant endsAt;
     private Instant createdAt;
@@ -50,18 +52,26 @@ public class Auction {
                     .createdAt(auctionEntity.getBuyer().getCreatedAt()).build();
         }
 
-        if (auctionEntity.getSellerReview() != null) {
-            this.sellerReview = Review.builder().reviewId(auctionEntity.getId()).seller(this.seller)
-                    .reviewText(auctionEntity.getSellerReview().getReviewText())
-                    .buyer(this.buyer)
-                    .rating(auctionEntity.getSellerReview().getRating()).build();
-        }
+        if (auctionEntity.getReviews() != null) {
+            for (ReviewEntity reviewEntity: auctionEntity.getReviews()) {
+                System.out.println(reviewEntity.getRating());
+                Review newReview = Review.builder()
+                        .rating(reviewEntity.getRating())
+                        .reviewText(reviewEntity.getReviewText())
+                        .buyer(this.buyer)
+                        .seller(this.seller)
+                        .build();
+                this.reviews.add(newReview);
 
-        if (auctionEntity.getBuyerReview() != null) {
-            this.buyerReview = Review.builder().reviewId(auctionEntity.getId()).buyer(this.buyer)
-                    .reviewText(auctionEntity.getBuyerReview().getReviewText())
-                    .seller(this.seller)
-                    .rating(auctionEntity.getBuyerReview().getRating()).build();
+
+
+
+/*                this.reviews = Review.builder().reviewId(auctionEntity.getId()).seller(this.seller)
+                        .reviewText(reviewEntity.getReviewText().toString())
+                        .buyer(this.buyer)
+                        .rating(reviewEntity.getRating()).build();*/
+            }
+
         }
 
         this.auctionState = (AuctionState) auctionEntity.getAuctionState();

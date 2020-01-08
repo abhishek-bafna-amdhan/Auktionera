@@ -5,5 +5,5 @@ import se.iths.auktionera.business.model.ReviewRequest;
 
 public interface IReviewService {
 
-    Review createReview(ReviewRequest reviewRequest, Long id);
+    Review createReview(ReviewRequest reviewRequest, Long id, String authId);
 }

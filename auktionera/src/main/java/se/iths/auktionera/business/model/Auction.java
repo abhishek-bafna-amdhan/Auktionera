@@ -24,7 +24,6 @@ public class Auction {
     @Nullable
     private User buyer;
 
-    private List<Review> reviews = new ArrayList<>();
     private AuctionState auctionState;
     private Instant endsAt;
     private Instant createdAt;
@@ -50,28 +49,6 @@ public class Auction {
                     .id(auctionEntity.getBuyer().getId())
                     .userName(auctionEntity.getBuyer().getUserName())
                     .createdAt(auctionEntity.getBuyer().getCreatedAt()).build();
-        }
-
-        if (auctionEntity.getReviews() != null) {
-            for (ReviewEntity reviewEntity: auctionEntity.getReviews()) {
-                System.out.println(reviewEntity.getRating());
-                Review newReview = Review.builder()
-                        .rating(reviewEntity.getRating())
-                        .reviewText(reviewEntity.getReviewText())
-                        .buyer(this.buyer)
-                        .seller(this.seller)
-                        .build();
-                this.reviews.add(newReview);
-
-
-
-
-/*                this.reviews = Review.builder().reviewId(auctionEntity.getId()).seller(this.seller)
-                        .reviewText(reviewEntity.getReviewText().toString())
-                        .buyer(this.buyer)
-                        .rating(reviewEntity.getRating()).build();*/
-            }
-
         }
 
         this.auctionState = (AuctionState) auctionEntity.getAuctionState();

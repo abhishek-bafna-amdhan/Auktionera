@@ -79,6 +79,7 @@ public class ReviewService implements IReviewService {
 
     @Override
     public Review createReview(ReviewRequest reviewRequest, Long id, String authId) {
+        AccountEntity acc = accountRepo.findByAuthId(authId);
         Optional<AuctionEntity> entityOptional = auctionRepo.findById(id);
         AuctionEntity auctionEntity = new AuctionEntity();
         if (entityOptional.isPresent()) auctionEntity = entityOptional.get();
@@ -93,15 +94,18 @@ public class ReviewService implements IReviewService {
 
         reviewRepo.saveAndFlush(reviewToSave);
 
-        UserStatsEntity buyerStatsEntity = userStatsRepo.findById(auctionEntity.getBuyer().getId()).orElseThrow();
-        buyerStatsEntity.getReviewEntities().add(reviewToSave);
-        buyerStatsEntity.setBuyerRating(buyerStatsEntity.getBuyerRating());
-        UserStatsEntity sellerStatsEntity = userStatsRepo.findById(auctionEntity.getSeller().getId()).orElseThrow();
-        sellerStatsEntity.getReviewEntities().add(reviewToSave);
-        sellerStatsEntity.setSellerRating(sellerStatsEntity.getSellerRating());
+        if (acc.getId() == auctionEntity.getBuyer().getId()) {
+            UserStatsEntity sellerStatsEntity = userStatsRepo.findById(auctionEntity.getSeller().getId()).orElseThrow();
+            sellerStatsEntity.getReviewEntities().add(reviewToSave);
+            sellerStatsEntity.setSellerRating(sellerStatsEntity.getSellerRating());
+            userStatsRepo.saveAndFlush(sellerStatsEntity);
+        } else {
+            UserStatsEntity buyerStatsEntity = userStatsRepo.findById(auctionEntity.getBuyer().getId()).orElseThrow();
+            buyerStatsEntity.getReviewEntities().add(reviewToSave);
+            buyerStatsEntity.setBuyerRating(buyerStatsEntity.getBuyerRating());
+            userStatsRepo.saveAndFlush(buyerStatsEntity);
+        }
 
-        userStatsRepo.saveAndFlush(sellerStatsEntity);
-        userStatsRepo.saveAndFlush(buyerStatsEntity);
         return new Review(reviewToSave);
     }
 }

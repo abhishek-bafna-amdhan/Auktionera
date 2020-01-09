@@ -33,7 +33,7 @@ public class AccountService implements IAccountService {
         Optional<UserStatsEntity> optional = userStatsRepo.findById(acc.getId());
         UserStatsEntity use = new UserStatsEntity();
         if (optional.isEmpty()) {
-            use = userStatsRepo.saveAndFlush(UserStatsEntity.builder().build());
+            use = userStatsRepo.saveAndFlush(UserStatsEntity.builder().account(acc).build());
         }
         acc.setUserStats(use);
         use.setAccount(acc);

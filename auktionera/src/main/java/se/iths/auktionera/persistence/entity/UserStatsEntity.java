@@ -30,18 +30,27 @@ public class UserStatsEntity {
     @OneToOne
     private AccountEntity account;
 
+    public double getSellerRating(){
+        return calculateSellerAverage(this.id);
+    }
+
+    public double getBuyerRating() {
+        return calculateBuyerAverage(this.id);
+    }
+
     public UserStatsEntity(ReviewEntity reviewToSave, AccountEntity account) {
         this.account = account;
+        this.reviewEntities.add(reviewToSave);
         this.sellerRating = calculateSellerAverage(account.getId());
         this.buyerRating = calculateBuyerAverage(account.getId());
         this.totalPurchases++;
         this.totalSales++;
-        this.reviewEntities.add(reviewToSave);
     }
 
     @Transient
     private Double calculateSellerAverage(Long id){
         List<Double> sum = new ArrayList<>();
+        assert reviewEntities != null;
         for (ReviewEntity r: reviewEntities
              ) {
             if (r.getSeller().getId() == id) {
@@ -55,6 +64,7 @@ public class UserStatsEntity {
     @Transient
     private Double calculateBuyerAverage(Long id){
         List<Double> sum = new ArrayList<>();
+        assert reviewEntities != null;
         for (ReviewEntity r: reviewEntities
         ) {
             if (r.getBuyer().getId() == id) {

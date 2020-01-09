@@ -92,10 +92,16 @@ public class ReviewService implements IReviewService {
                 .build();
 
         reviewRepo.saveAndFlush(reviewToSave);
-        AccountEntity accountEntity = accountRepo.findByAuthId(authId);
-        UserStatsEntity userStatsEntity = new UserStatsEntity(reviewToSave, accountEntity);
 
-        userStatsRepo.saveAndFlush(userStatsEntity);
+        UserStatsEntity buyerStatsEntity = userStatsRepo.findById(auctionEntity.getBuyer().getId()).orElseThrow();
+        buyerStatsEntity.getReviewEntities().add(reviewToSave);
+        buyerStatsEntity.setBuyerRating(buyerStatsEntity.getBuyerRating());
+        UserStatsEntity sellerStatsEntity = userStatsRepo.findById(auctionEntity.getSeller().getId()).orElseThrow();
+        sellerStatsEntity.getReviewEntities().add(reviewToSave);
+        sellerStatsEntity.setSellerRating(sellerStatsEntity.getSellerRating());
+
+        userStatsRepo.saveAndFlush(sellerStatsEntity);
+        userStatsRepo.saveAndFlush(buyerStatsEntity);
         return new Review(reviewToSave);
     }
 }

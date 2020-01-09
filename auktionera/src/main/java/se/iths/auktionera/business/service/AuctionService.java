@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import se.iths.auktionera.business.model.*;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
+import se.iths.auktionera.persistence.entity.UserStatsEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
 import se.iths.auktionera.persistence.repo.AuctionRepo;
+import se.iths.auktionera.persistence.repo.UserStatsRepo;
 
 import java.time.Instant;
 import java.util.*;
@@ -16,10 +18,12 @@ public class AuctionService implements IAuctionService {
 
     private final AuctionRepo auctionRepo;
     private final AccountRepo accountRepo;
+    private final UserStatsRepo userStatsRepo;
 
-    public AuctionService(AuctionRepo auctionRepo, AccountRepo accountRepo) {
+    public AuctionService(AuctionRepo auctionRepo, AccountRepo accountRepo, UserStatsRepo userStatsRepo) {
         this.auctionRepo = auctionRepo;
         this.accountRepo = accountRepo;
+        this.userStatsRepo = userStatsRepo;
     }
 
     @Override
@@ -89,6 +93,7 @@ public class AuctionService implements IAuctionService {
                 auctionEntity.setEndedAt(Instant.now());
                 auctionEntity.setAuctionState(AuctionState.ENDEDBOUGHT);
                 AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
+                updateUserStats(updatedAuction);
                 return new Auction(updatedAuction);
             }
             Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
@@ -96,6 +101,16 @@ public class AuctionService implements IAuctionService {
             AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
             return new Auction(updatedAuction);
         }
+    }
+
+    private void updateUserStats(AuctionEntity updatedAuction) {
+        UserStatsEntity sellerStats = userStatsRepo.findById(updatedAuction.getSeller().getId()).orElseThrow();
+        sellerStats.setTotalSales(sellerStats.getTotalSales() + 1);
+        UserStatsEntity buyerStats = userStatsRepo.findById(updatedAuction.getBuyer().getId()).orElseThrow();
+        buyerStats.setTotalPurchases(buyerStats.getTotalPurchases() + 1);
+        userStatsRepo.saveAndFlush(sellerStats);
+        userStatsRepo.saveAndFlush(buyerStats);
+
     }
 
     @Override

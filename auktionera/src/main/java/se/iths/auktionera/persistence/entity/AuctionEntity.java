@@ -16,7 +16,7 @@ import java.util.List;
 public class AuctionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false, updatable = false)
@@ -30,12 +30,6 @@ public class AuctionEntity {
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private AccountEntity buyer;
-
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "review_id",
-    joinColumns = { @JoinColumn(name = "auction_id")},
-    inverseJoinColumns = {@JoinColumn(name = "review_id")})
-    private List<ReviewEntity> reviews;
 
     private Enum auctionState;
 

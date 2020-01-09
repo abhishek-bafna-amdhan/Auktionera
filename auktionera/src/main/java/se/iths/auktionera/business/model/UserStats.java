@@ -10,6 +10,7 @@ import lombok.*;
 public class UserStats {
     private int totalSales;
     private int totalPurchases;
-    private float sellerRating;
-    private float buyerRating;
+    private double sellerRating;
+    private double buyerRating;
+    private String reviewComments;
 }

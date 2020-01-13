@@ -61,7 +61,7 @@ public class AuctionService implements IAuctionService {
                 .buyOutPrice(auctionRequest.getBuyoutPrice())
                 .minBidStep(auctionRequest.getMinBidStep())
                 .deliveryType(auctionRequest.getDeliveryType()).build();
-        CategoryEntity currentCategory = categoryRepo.findByCategory(auctionRequest.getCategory());
+        CategoryEntity currentCategory = categoryRepo.findByCategoryTitle(auctionRequest.getCategory()).orElseThrow();
         auctionToBeCreated.setCategory(currentCategory);
         currentCategory.getAuctions().add(auctionToBeCreated);
         auctionRepo.saveAndFlush(auctionToBeCreated);
@@ -76,6 +76,9 @@ public class AuctionService implements IAuctionService {
         AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow();
         AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         acc.getAuctionEntities().remove(auctionEntity);
+        CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(auctionEntity.getCategory().getCategoryTitle()).orElseThrow();
+        categoryEntity.getAuctions().remove(auctionEntity);
+        categoryRepo.saveAndFlush(categoryEntity);
         accountRepo.saveAndFlush(acc);
         auctionRepo.deleteById(id);
         auctionRepo.flush();

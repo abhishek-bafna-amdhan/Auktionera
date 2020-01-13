@@ -1,7 +1,6 @@
 package se.iths.auktionera.persistence.entity;
 
 import lombok.*;
-import se.iths.auktionera.business.model.Category;
 
 import javax.persistence.*;
 import java.util.List;

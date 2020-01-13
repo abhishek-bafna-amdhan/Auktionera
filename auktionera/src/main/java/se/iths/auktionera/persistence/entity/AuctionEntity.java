@@ -1,10 +1,11 @@
 package se.iths.auktionera.persistence.entity;
 
 import lombok.*;
+import se.iths.auktionera.business.model.AuctionState;
+import se.iths.auktionera.business.model.DeliveryType;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Table(name = "auctions")
@@ -24,6 +25,9 @@ public class AuctionEntity {
     private String description;
 
     @ManyToOne
+    private CategoryEntity category;
+
+    @ManyToOne
     @JoinColumn(name = "seller_id")
     private AccountEntity seller;
 
@@ -31,7 +35,8 @@ public class AuctionEntity {
     @JoinColumn(name = "buyer_id")
     private AccountEntity buyer;
 
-    private Enum auctionState;
+    @Enumerated(EnumType.STRING)
+    private AuctionState auctionState;
 
     private Instant endsAt;
     private Instant createdAt;
@@ -41,7 +46,9 @@ public class AuctionEntity {
     private int buyOutPrice;
     private int minBidStep;
     private int currentBid;
-    private Enum deliveryType;
+
+    @Enumerated(EnumType.STRING)
+    private DeliveryType deliveryType;
 }
 
 

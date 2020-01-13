@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AuctionRequest {
     private String tags;
+    private String category;
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // for example "2019-12-22T23:26:57.222Z"

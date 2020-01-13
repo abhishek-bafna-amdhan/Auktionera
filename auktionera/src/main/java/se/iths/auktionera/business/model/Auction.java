@@ -17,6 +17,7 @@ import java.util.List;
 public class Auction {
 
     private long auctionId;
+    private String category;
     private String tags; //for the moment changed to String, should be changed into List or own Object
     private String description;
     private User seller;
@@ -37,6 +38,7 @@ public class Auction {
 
     public Auction(AuctionEntity auctionEntity) {
         this.auctionId = auctionEntity.getId();
+        this.category = auctionEntity.getCategory().getCategoryTitle();
         this.tags = auctionEntity.getTags();
         this.description = auctionEntity.getDescription();
         this.seller = User.builder()

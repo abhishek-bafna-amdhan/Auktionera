@@ -3,11 +3,8 @@ package se.iths.auktionera.business.model;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
-import se.iths.auktionera.persistence.entity.ReviewEntity;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -44,16 +41,30 @@ public class Auction {
         this.seller = User.builder()
                 .id(auctionEntity.getSeller().getId())
                 .userName(auctionEntity.getSeller().getUserName())
-                .createdAt(auctionEntity.getSeller().getCreatedAt()).build();
+                .createdAt(auctionEntity.getSeller().getCreatedAt())
+                .stats(UserStats.builder()
+                        .totalSales(auctionEntity.getSeller().getUserStats().getTotalSales())
+                        .totalPurchases(auctionEntity.getSeller().getUserStats().getTotalPurchases())
+                        .buyerRating(auctionEntity.getSeller().getUserStats().getBuyerRating())
+                        .sellerRating(auctionEntity.getSeller().getUserStats().getSellerRating())
+                        .build())
+                .build();
 
         if (auctionEntity.getBuyer() != null) {
             this.buyer = User.builder()
                     .id(auctionEntity.getBuyer().getId())
                     .userName(auctionEntity.getBuyer().getUserName())
-                    .createdAt(auctionEntity.getBuyer().getCreatedAt()).build();
+                    .createdAt(auctionEntity.getBuyer().getCreatedAt())
+                    .stats(UserStats.builder()
+                            .totalSales(auctionEntity.getBuyer().getUserStats().getTotalSales())
+                            .totalPurchases(auctionEntity.getBuyer().getUserStats().getTotalPurchases())
+                            .buyerRating(auctionEntity.getBuyer().getUserStats().getBuyerRating())
+                            .sellerRating(auctionEntity.getBuyer().getUserStats().getSellerRating())
+                            .build())
+                    .build();
         }
 
-        this.auctionState = (AuctionState) auctionEntity.getAuctionState();
+        this.auctionState = auctionEntity.getAuctionState();
         this.endsAt = auctionEntity.getEndsAt();
         this.createdAt = auctionEntity.getCreatedAt();
         this.currentBidAt = auctionEntity.getCurrentBidAt();

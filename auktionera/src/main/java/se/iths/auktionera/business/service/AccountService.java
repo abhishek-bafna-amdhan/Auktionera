@@ -29,15 +29,11 @@ public class AccountService implements IAccountService {
 
         if (acc == null) {
             acc = accountRepo.saveAndFlush(AccountEntity.builder().authId(authId).createdAt(Instant.now()).build());
+            UserStatsEntity use = new UserStatsEntity();
+            acc.setUserStats(use);
+            use.setAccount(acc);
+            userStatsRepo.saveAndFlush(use);
         }
-        Optional<UserStatsEntity> optional = userStatsRepo.findById(acc.getId());
-        UserStatsEntity use = new UserStatsEntity();
-        if (optional.isEmpty()) {
-            use = userStatsRepo.saveAndFlush(UserStatsEntity.builder().account(acc).build());
-        }
-        acc.setUserStats(use);
-        use.setAccount(acc);
-        userStatsRepo.saveAndFlush(use);
         accountRepo.saveAndFlush(acc);
         return new Account(acc);
     }

@@ -12,6 +12,8 @@ import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
 import se.iths.auktionera.persistence.repo.AuctionRepo;
+import se.iths.auktionera.persistence.repo.CategoryRepo;
+import se.iths.auktionera.persistence.repo.UserStatsRepo;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,7 +23,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -33,6 +34,12 @@ class AuctionServiceTest {
     @MockBean
     AccountRepo accountRepo;
 
+    @MockBean
+    UserStatsRepo userStatsRepo;
+
+    @MockBean
+    CategoryRepo categoryRepo;
+
     private IAuctionService auctionService;
     private AuctionEntity auctionEntity1;
     private AuctionRequest auctionRequest;
@@ -42,7 +49,7 @@ class AuctionServiceTest {
     @BeforeEach
     void setUp() {
 
-        auctionService = new AuctionService(auctionRepo, accountRepo);
+        auctionService = new AuctionService(auctionRepo, accountRepo, userStatsRepo, categoryRepo);
         accountEntity = AccountEntity.builder()
                 .id(10)
                 .anonymousBuyer(false)

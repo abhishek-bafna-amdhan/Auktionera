@@ -1,6 +1,8 @@
 package se.iths.auktionera.persistence.entity;
 
 import lombok.*;
+import se.iths.auktionera.business.model.AuctionState;
+import se.iths.auktionera.business.model.DeliveryType;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -15,13 +17,15 @@ import java.time.Instant;
 public class AuctionEntity {
 
     @Id
-    @Column(name = "auctionId")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long auctionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(nullable = false, updatable = false)
     private String tags;
     private String description;
+
+    @ManyToOne
+    private CategoryEntity category;
 
     @ManyToOne
     @JoinColumn(name = "seller_id")
@@ -31,14 +35,8 @@ public class AuctionEntity {
     @JoinColumn(name = "buyer_id")
     private AccountEntity buyer;
 
-    @OneToOne
-    @JoinColumn(name = "sellerReview_id")
-    private ReviewEntity sellerReview;
-
-    @OneToOne
-    @JoinColumn(name = "buyerReview_id")
-    private ReviewEntity buyerReview;
-    private Enum auctionState;
+    @Enumerated(EnumType.STRING)
+    private AuctionState auctionState;
 
     private Instant endsAt;
     private Instant createdAt;
@@ -48,7 +46,9 @@ public class AuctionEntity {
     private int buyOutPrice;
     private int minBidStep;
     private int currentBid;
-    private Enum deliveryType;
+
+    @Enumerated(EnumType.STRING)
+    private DeliveryType deliveryType;
 }
 
 

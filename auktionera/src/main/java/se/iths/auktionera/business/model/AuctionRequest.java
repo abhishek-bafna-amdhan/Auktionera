@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -13,10 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 public class AuctionRequest {
     private String tags;
+    private String category;
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    private Instant endsAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // for example "2019-12-22T23:26:57.222Z"
+    private Instant endsAt = Instant.now().plus(Duration.ofDays(3));
 
     private int startPrice;
 

@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 import se.iths.auktionera.business.model.*;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
+import se.iths.auktionera.persistence.entity.CategoryEntity;
+import se.iths.auktionera.persistence.entity.UserStatsEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
 import se.iths.auktionera.persistence.repo.AuctionRepo;
+import se.iths.auktionera.persistence.repo.CategoryRepo;
+import se.iths.auktionera.persistence.repo.UserStatsRepo;
 
 import java.time.Instant;
 import java.util.*;
@@ -16,10 +20,14 @@ public class AuctionService implements IAuctionService {
 
     private final AuctionRepo auctionRepo;
     private final AccountRepo accountRepo;
+    private final UserStatsRepo userStatsRepo;
+    private final CategoryRepo categoryRepo;
 
-    public AuctionService(AuctionRepo auctionRepo, AccountRepo accountRepo) {
+    public AuctionService(AuctionRepo auctionRepo, AccountRepo accountRepo, UserStatsRepo userStatsRepo, CategoryRepo categoryRepo) {
         this.auctionRepo = auctionRepo;
         this.accountRepo = accountRepo;
+        this.userStatsRepo = userStatsRepo;
+        this.categoryRepo = categoryRepo;
     }
 
     @Override
@@ -53,14 +61,25 @@ public class AuctionService implements IAuctionService {
                 .buyOutPrice(auctionRequest.getBuyoutPrice())
                 .minBidStep(auctionRequest.getMinBidStep())
                 .deliveryType(auctionRequest.getDeliveryType()).build();
+        CategoryEntity currentCategory = categoryRepo.findByCategoryTitle(auctionRequest.getCategory()).orElseThrow();
+        auctionToBeCreated.setCategory(currentCategory);
+        currentCategory.getAuctions().add(auctionToBeCreated);
         auctionRepo.saveAndFlush(auctionToBeCreated);
+        categoryRepo.saveAndFlush(currentCategory);
         seller.getAuctionEntities().add(auctionToBeCreated);
         accountRepo.saveAndFlush(seller);
         return new Auction(auctionToBeCreated);
     }
 
     @Override
-    public void deleteAuctionById(long id) {
+    public void deleteAuctionById(Long id, String authId) {
+        AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow();
+        AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
+        acc.getAuctionEntities().remove(auctionEntity);
+        CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(auctionEntity.getCategory().getCategoryTitle()).orElseThrow();
+        categoryEntity.getAuctions().remove(auctionEntity);
+        categoryRepo.saveAndFlush(categoryEntity);
+        accountRepo.saveAndFlush(acc);
         auctionRepo.deleteById(id);
         auctionRepo.flush();
     }
@@ -76,7 +95,8 @@ public class AuctionService implements IAuctionService {
         Auction auction = new Auction(auctionEntity);
         AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         if (bid.getBid() < auction.getStartPrice() ||
-                bid.getBid() <= auction.getCurrentBid()) throw new IllegalArgumentException("Cannot bid lower than start price and current bid.");
+                bid.getBid() <= auction.getCurrentBid()) throw new IllegalArgumentException("Cannot bid lower than start price: " +
+                auction.getStartPrice() + " and current bid: " + auction.getCurrentBid());
         else {
             if (bid.getBid() == auction.getBuyOutPrice()) {
                 Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
@@ -84,6 +104,7 @@ public class AuctionService implements IAuctionService {
                 auctionEntity.setEndedAt(Instant.now());
                 auctionEntity.setAuctionState(AuctionState.ENDEDBOUGHT);
                 AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
+                updateUserStats(updatedAuction);
                 return new Auction(updatedAuction);
             }
             Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
@@ -91,6 +112,16 @@ public class AuctionService implements IAuctionService {
             AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
             return new Auction(updatedAuction);
         }
+    }
+
+    private void updateUserStats(AuctionEntity updatedAuction) {
+        UserStatsEntity sellerStats = userStatsRepo.findById(updatedAuction.getSeller().getId()).orElseThrow();
+        sellerStats.setTotalSales(sellerStats.getTotalSales() + 1);
+        UserStatsEntity buyerStats = userStatsRepo.findById(updatedAuction.getBuyer().getId()).orElseThrow();
+        buyerStats.setTotalPurchases(buyerStats.getTotalPurchases() + 1);
+        userStatsRepo.saveAndFlush(sellerStats);
+        userStatsRepo.saveAndFlush(buyerStats);
+
     }
 
     @Override

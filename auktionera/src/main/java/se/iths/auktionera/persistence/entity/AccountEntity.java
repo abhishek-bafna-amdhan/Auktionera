@@ -20,7 +20,7 @@ import java.util.Set;
 public class AccountEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
 
@@ -41,4 +41,7 @@ public class AccountEntity {
 
     @OneToMany
     private Set<ReviewEntity> reviewEntities = new HashSet<>();
+
+    @OneToOne
+    private UserStatsEntity userStats;
 }

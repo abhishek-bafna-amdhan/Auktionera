@@ -2,6 +2,9 @@ package se.iths.auktionera.business.service;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import se.iths.auktionera.api.exception.InvalidBidException;
+import se.iths.auktionera.api.exception.InvalidCategoryException;
+import se.iths.auktionera.api.exception.NotFoundException;
 import se.iths.auktionera.business.model.*;
 import se.iths.auktionera.persistence.entity.*;
 import se.iths.auktionera.persistence.repo.*;
@@ -38,8 +41,8 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public Auction getAuctionById(long id) {
-        Optional<AuctionEntity> optionalAuction = auctionRepo.findById(id);
-        AuctionEntity auctionEntity = optionalAuction.orElseThrow();
+        AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +
+                id + " was found. Please insert a valid auction id."));
         return new Auction(auctionEntity);
     }
 
@@ -56,7 +59,9 @@ public class AuctionService implements IAuctionService {
                 .buyOutPrice(auctionRequest.getBuyoutPrice())
                 .minBidStep(auctionRequest.getMinBidStep())
                 .deliveryType(auctionRequest.getDeliveryType()).build();
-        CategoryEntity currentCategory = categoryRepo.findByCategoryTitle(auctionRequest.getCategory()).orElseThrow();
+        CategoryEntity currentCategory = categoryRepo.findByCategoryTitle(auctionRequest.getCategory()).orElseThrow(() ->
+                new InvalidCategoryException(auctionRequest.getCategory() +
+                        "is not a valid category. Please select between these categories: " + printAllCategories()));
         Set<TagsEntity> tags = convertListToSet(auctionRequest.getTags());
         tagsRepo.saveAll(tags);
         auctionToBeCreated.setTags(tags);
@@ -81,7 +86,8 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public void deleteAuctionById(Long id, String authId) {
-        AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow();
+        AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +
+                id + " was found. Please insert a valid auction id."));
         AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         acc.getAuctionEntities().remove(auctionEntity);
         CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(auctionEntity.getCategory().getCategoryTitle()).orElseThrow();
@@ -94,17 +100,14 @@ public class AuctionService implements IAuctionService {
 
     @Override
     public Auction addBidToAuction(Bid bid, Long id, String authId) {
-//        private Integer startPrice;
-//        private Integer buyOutPrice;
-//        private Integer minBidStep;
-//        private Integer currentBid;
-        Optional<AuctionEntity> optionalAuction = auctionRepo.findById(id);
-        AuctionEntity auctionEntity = optionalAuction.orElseThrow();
+
+        AuctionEntity auctionEntity = auctionRepo.findByIdAndAuctionState(id, AuctionState.INPROGRESS).orElseThrow(() -> new NotFoundException("No auction with id: " +
+                id + " was found. Please insert a valid auction id."));
         Auction auction = new Auction(auctionEntity);
         AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         if (bid.getBid() < auction.getStartPrice() ||
-                bid.getBid() <= auction.getCurrentBid()) throw new IllegalArgumentException("Cannot bid lower than start price: " +
-                auction.getStartPrice() + " and current bid: " + auction.getCurrentBid());
+                bid.getBid() <= auction.getCurrentBid()) throw new InvalidBidException("Cannot bid lower than starting price: " +
+                auction.getStartPrice() + " or lower than the current bid: " + auction.getCurrentBid());
         else {
             if (bid.getBid() == auction.getBuyOutPrice()) {
                 Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
@@ -142,6 +145,12 @@ public class AuctionService implements IAuctionService {
             System.out.println(auctionEntity.getDescription());
         }
         return auctionsToReturn;
+    }
+
+    public String printAllCategories() {
+        StringBuilder result = new StringBuilder();
+        categoryRepo.findAll().forEach(c -> result.append(c.getCategoryTitle()).append(", "));
+        return result.deleteCharAt(result.lastIndexOf(",")).toString();
     }
 
     private Sort orderBy(Map<String, String> sorters) {

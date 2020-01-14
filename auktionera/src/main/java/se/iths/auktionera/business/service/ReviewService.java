@@ -1,6 +1,7 @@
 package se.iths.auktionera.business.service;
 
 import org.springframework.stereotype.Service;
+import se.iths.auktionera.api.exception.NotFoundException;
 import se.iths.auktionera.business.model.Review;
 import se.iths.auktionera.business.model.ReviewRequest;
 import se.iths.auktionera.persistence.entity.AccountEntity;
@@ -29,60 +30,11 @@ public class ReviewService implements IReviewService {
         this.userStatsRepo = userStatsRepo;
     }
 
-//    @Override
-//    public Review createSellerReview(ReviewRequest incomingReview, Long id) {
-//        Optional<AuctionEntity> entityOptional = auctionRepo.findById(id);
-//        AuctionEntity auctionEntity = new AuctionEntity();
-//        if (entityOptional.isPresent()) auctionEntity = entityOptional.get();
-//        ReviewEntity reviewToSave = ReviewEntity.builder()
-//                .seller(auctionEntity.getSeller())
-//                .buyer(auctionEntity.getBuyer())
-//                .reviewText(incomingReview.getReviewText())
-//                .rating(incomingReview.getRating())
-//                .createdAt(Instant.now())
-//                .lastEditAt(Instant.now())
-//                .build();
-//
-//        reviewRepo.saveAndFlush(reviewToSave);
-//        auctionEntity.setSellerReview(reviewToSave);
-//        auctionEntity.getSeller().getReviewEntities().add(reviewToSave);
-//        auctionRepo.saveAndFlush(auctionEntity);
-//        return new Review(reviewToSave);
-//    }
-//
-//    @Override
-//    public Review createBuyerReview(ReviewRequest incomingReview, Long id) {
-//        Optional<AuctionEntity> entityOptional = auctionRepo.findById(id);
-//        AuctionEntity auctionEntity = new AuctionEntity();
-//        if (entityOptional.isPresent()) auctionEntity = entityOptional.get();
-//        ReviewEntity reviewToSave = ReviewEntity.builder()
-//                .seller(auctionEntity.getSeller())
-//                .buyer(auctionEntity.getBuyer())
-//                .reviewText(incomingReview.getReviewText())
-//                .rating(incomingReview.getRating())
-//                .createdAt(Instant.now())
-//                .lastEditAt(Instant.now())
-//                .build();
-//
-//        reviewRepo.saveAndFlush(reviewToSave);
-//        auctionEntity.setBuyerReview(reviewToSave);
-//        auctionEntity.getBuyer().getReviewEntities().add(reviewToSave);
-//        auctionRepo.saveAndFlush(auctionEntity);
-//        return new Review(reviewToSave);
-//    }
-//
-//    @Override
-//    public void checkAccountAgainstSellerId(ReviewRequest reviewRequest, Long id) {
-//        if (reviewRequest.isBuyer()) createSellerReview(reviewRequest, id);
-//        else createBuyerReview(reviewRequest, id);
-//    }
-
     @Override
     public Review createReview(ReviewRequest reviewRequest, Long id, String authId) {
         AccountEntity acc = accountRepo.findByAuthId(authId);
-        Optional<AuctionEntity> entityOptional = auctionRepo.findById(id);
-        AuctionEntity auctionEntity = new AuctionEntity();
-        if (entityOptional.isPresent()) auctionEntity = entityOptional.get();
+        AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +
+                id + " was found. Please insert a valid auction id."));
         ReviewEntity reviewToSave = ReviewEntity.builder()
                 .seller(auctionEntity.getSeller())
                 .buyer(auctionEntity.getBuyer())

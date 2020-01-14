@@ -3,8 +3,13 @@ package se.iths.auktionera.business.model;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
+import se.iths.auktionera.persistence.entity.TagsEntity;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -15,7 +20,7 @@ public class Auction {
 
     private long auctionId;
     private String category;
-    private String tags; //for the moment changed to String, should be changed into List or own Object
+    private List<String> tags = new ArrayList<>(); //for the moment changed to String, should be changed into List or own Object
     private String description;
     private User seller;
 
@@ -36,7 +41,7 @@ public class Auction {
     public Auction(AuctionEntity auctionEntity) {
         this.auctionId = auctionEntity.getId();
         this.category = auctionEntity.getCategory().getCategoryTitle();
-        this.tags = auctionEntity.getTags();
+        this.tags = convertToList(auctionEntity.getTags());
         this.description = auctionEntity.getDescription();
         this.seller = User.builder()
                 .id(auctionEntity.getSeller().getId())
@@ -74,6 +79,10 @@ public class Auction {
         this.minBidStep = auctionEntity.getMinBidStep();
         this.currentBid = auctionEntity.getCurrentBid();
         this.deliveryType = (DeliveryType) auctionEntity.getDeliveryType();
+    }
+
+    public List<String> convertToList(Set<TagsEntity> tags){
+        return tags.stream().map(TagsEntity::getTag).collect(Collectors.toList());
     }
 }
 

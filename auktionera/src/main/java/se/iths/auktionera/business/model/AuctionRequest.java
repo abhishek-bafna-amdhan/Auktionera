@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.iths.auktionera.persistence.entity.TagsEntity;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
 @Getter
 @NoArgsConstructor
 public class AuctionRequest {
-    private String tags;
+    private List<String> tags = new ArrayList<>();
     private String category;
     private String description;
 
@@ -21,12 +23,8 @@ public class AuctionRequest {
     private Instant endsAt = Instant.now().plus(Duration.ofDays(3));
 
     private int startPrice;
-
     private int buyoutPrice;
-
     private int minBidStep;
-
     private DeliveryType deliveryType;
-
     private List<Image> images;
 }

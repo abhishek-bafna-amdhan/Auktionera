@@ -6,6 +6,8 @@ import se.iths.auktionera.business.model.DeliveryType;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "auctions")
@@ -20,8 +22,10 @@ public class AuctionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, updatable = false)
-    private String tags;
+    @ManyToMany
+    @Column(updatable = false)
+    private Set<TagsEntity> tags = new HashSet<>();
+
     private String description;
 
     @ManyToOne

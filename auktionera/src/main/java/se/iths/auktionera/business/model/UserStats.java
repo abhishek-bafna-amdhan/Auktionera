@@ -1,6 +1,7 @@
 package se.iths.auktionera.business.model;
 
 import lombok.*;
+import se.iths.auktionera.persistence.entity.UserStatsEntity;
 
 @Getter
 @Setter
@@ -13,4 +14,11 @@ public class UserStats {
     private double sellerRating;
     private double buyerRating;
     private String reviewComments;
+
+    public UserStats(UserStatsEntity ent){
+        this.totalSales = ent.getTotalSales();
+        this.totalPurchases = ent.getTotalPurchases();
+        this.sellerRating = ent.getSellerRating();
+        this.buyerRating = ent.getBuyerRating();
+    }
 }

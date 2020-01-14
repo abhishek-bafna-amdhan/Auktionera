@@ -71,7 +71,7 @@ class AuctionControllerTest {
     void createAuction(@Autowired MockMvc mvc) throws Exception {
         Auction auction = Auction.builder()
                 .description("Wonderful table")
-                .tags("furniture").build();
+                .build();
         String jsonBody = "    {\n" +
                 "        \"description\" : \"Wonderful table\",\n" +
                 "\t\t\t\t\"tags\" : \"furniture\",\n" +

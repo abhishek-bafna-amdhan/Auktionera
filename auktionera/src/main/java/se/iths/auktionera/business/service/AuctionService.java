@@ -3,14 +3,8 @@ package se.iths.auktionera.business.service;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import se.iths.auktionera.business.model.*;
-import se.iths.auktionera.persistence.entity.AccountEntity;
-import se.iths.auktionera.persistence.entity.AuctionEntity;
-import se.iths.auktionera.persistence.entity.CategoryEntity;
-import se.iths.auktionera.persistence.entity.UserStatsEntity;
-import se.iths.auktionera.persistence.repo.AccountRepo;
-import se.iths.auktionera.persistence.repo.AuctionRepo;
-import se.iths.auktionera.persistence.repo.CategoryRepo;
-import se.iths.auktionera.persistence.repo.UserStatsRepo;
+import se.iths.auktionera.persistence.entity.*;
+import se.iths.auktionera.persistence.repo.*;
 
 import java.time.Instant;
 import java.util.*;
@@ -22,12 +16,14 @@ public class AuctionService implements IAuctionService {
     private final AccountRepo accountRepo;
     private final UserStatsRepo userStatsRepo;
     private final CategoryRepo categoryRepo;
+    private final TagsRepo tagsRepo;
 
-    public AuctionService(AuctionRepo auctionRepo, AccountRepo accountRepo, UserStatsRepo userStatsRepo, CategoryRepo categoryRepo) {
+    public AuctionService(AuctionRepo auctionRepo, AccountRepo accountRepo, UserStatsRepo userStatsRepo, CategoryRepo categoryRepo, TagsRepo tagsRepo) {
         this.auctionRepo = auctionRepo;
         this.accountRepo = accountRepo;
         this.userStatsRepo = userStatsRepo;
         this.categoryRepo = categoryRepo;
+        this.tagsRepo = tagsRepo;
     }
 
     @Override
@@ -52,7 +48,6 @@ public class AuctionService implements IAuctionService {
         AccountEntity seller = accountRepo.findByAuthId(authId);
         AuctionEntity auctionToBeCreated = AuctionEntity.builder()
                 .description(auctionRequest.getDescription())
-                .tags(auctionRequest.getTags())
                 .seller(seller)
                 .auctionState(AuctionState.INPROGRESS)
                 .endsAt(auctionRequest.getEndsAt())
@@ -62,6 +57,9 @@ public class AuctionService implements IAuctionService {
                 .minBidStep(auctionRequest.getMinBidStep())
                 .deliveryType(auctionRequest.getDeliveryType()).build();
         CategoryEntity currentCategory = categoryRepo.findByCategoryTitle(auctionRequest.getCategory()).orElseThrow();
+        Set<TagsEntity> tags = convertListToSet(auctionRequest.getTags());
+        tagsRepo.saveAll(tags);
+        auctionToBeCreated.setTags(tags);
         auctionToBeCreated.setCategory(currentCategory);
         currentCategory.getAuctions().add(auctionToBeCreated);
         auctionRepo.saveAndFlush(auctionToBeCreated);
@@ -69,6 +67,16 @@ public class AuctionService implements IAuctionService {
         seller.getAuctionEntities().add(auctionToBeCreated);
         accountRepo.saveAndFlush(seller);
         return new Auction(auctionToBeCreated);
+    }
+
+    public Set<TagsEntity> convertListToSet(List<String> list) {
+        Set<TagsEntity> setToReturn = new HashSet<>();
+        for (String s: list) {
+            TagsEntity t = new TagsEntity();
+            t.setTag(s);
+            setToReturn.add(t);
+         }
+        return setToReturn;
     }
 
     @Override

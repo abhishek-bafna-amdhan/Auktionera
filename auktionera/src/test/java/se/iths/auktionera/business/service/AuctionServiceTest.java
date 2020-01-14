@@ -10,10 +10,7 @@ import se.iths.auktionera.business.model.AuctionState;
 import se.iths.auktionera.business.model.DeliveryType;
 import se.iths.auktionera.persistence.entity.AccountEntity;
 import se.iths.auktionera.persistence.entity.AuctionEntity;
-import se.iths.auktionera.persistence.repo.AccountRepo;
-import se.iths.auktionera.persistence.repo.AuctionRepo;
-import se.iths.auktionera.persistence.repo.CategoryRepo;
-import se.iths.auktionera.persistence.repo.UserStatsRepo;
+import se.iths.auktionera.persistence.repo.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -40,6 +37,9 @@ class AuctionServiceTest {
     @MockBean
     CategoryRepo categoryRepo;
 
+    @MockBean
+    TagsRepo tagsRepo;
+
     private IAuctionService auctionService;
     private AuctionEntity auctionEntity1;
     private AuctionRequest auctionRequest;
@@ -49,7 +49,7 @@ class AuctionServiceTest {
     @BeforeEach
     void setUp() {
 
-        auctionService = new AuctionService(auctionRepo, accountRepo, userStatsRepo, categoryRepo);
+        auctionService = new AuctionService(auctionRepo, accountRepo, userStatsRepo, categoryRepo, tagsRepo);
         accountEntity = AccountEntity.builder()
                 .id(10)
                 .anonymousBuyer(false)
@@ -65,7 +65,6 @@ class AuctionServiceTest {
         auctionEntity1 = AuctionEntity.builder()
                 .seller(accountEntity)
                 .description("Laptop")
-                .tags("Electronics")
                 .endsAt(Instant.parse("2019-12-13T10:15:30Z"))
                 .startPrice(100)
                 .buyOutPrice(200)
@@ -77,7 +76,6 @@ class AuctionServiceTest {
         AuctionEntity auctionEntity2 = AuctionEntity.builder()
                 .seller(accountEntity)
                 .description("Nikes")
-                .tags("Shoes")
                 .endsAt(Instant.parse("2019-12-13T10:15:30Z"))
                 .startPrice(1000)
                 .buyOutPrice(2000)
@@ -87,7 +85,6 @@ class AuctionServiceTest {
                 .build();
 
         auctionRequest = new AuctionRequest();
-        auctionRequest.setTags("Laptop");
         auctionRequest.setDescription("Electronics");
         auctionRequest.setEndsAt(Instant.parse("2019-12-13T10:15:30Z"));
         auctionRequest.setStartPrice(100);

@@ -1,6 +1,8 @@
 package se.iths.auktionera.api.controller;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
+import se.iths.auktionera.api.IncomingQueryEvent;
 import se.iths.auktionera.business.model.*;
 import se.iths.auktionera.business.service.IAuctionService;
 import se.iths.auktionera.business.service.IReviewService;
@@ -14,14 +16,18 @@ public class AuctionController {
 
     private final IAuctionService auctionService;
     private final IReviewService reviewService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public AuctionController(IAuctionService auctionService, IReviewService reviewService) {
+    public AuctionController(IAuctionService auctionService, IReviewService reviewService, ApplicationEventPublisher applicationEventPublisher) {
         this.auctionService = auctionService;
         this.reviewService = reviewService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @GetMapping("api/auctions")
     public List<Auction> getAuctions(@RequestParam Map<String, String> filter, @RequestParam Map<String, String> sort) {
+        IncomingQueryEvent event = new IncomingQueryEvent(this);
+        applicationEventPublisher.publishEvent(event);
         return auctionService.getAuctions(filter, sort);
     }
 

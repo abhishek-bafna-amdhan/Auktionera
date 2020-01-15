@@ -1,5 +1,7 @@
 package se.iths.auktionera.business.service;
 
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import se.iths.auktionera.api.exception.InvalidBidException;
@@ -29,9 +31,19 @@ public class AuctionService implements IAuctionService {
         this.tagsRepo = tagsRepo;
     }
 
+    @EventListener
+    public void onStart(ApplicationEvent event){
+        List<AuctionEntity> expiredAuctions = auctionRepo.findByAuctionStateAndEndsAtIsLessThanEqual(AuctionState.INPROGRESS, Instant.now());
+        if (expiredAuctions.size() > 0 ) {
+            expiredAuctions.forEach(a -> a.setAuctionState(AuctionState.ENDEDNOTBOUGHT));
+            auctionRepo.saveAll(expiredAuctions);
+            System.out.println("Auction-list has been updated " + event.getTimestamp());
+        }
+    }
+
     @Override
     public List<Auction> getAuctions(Map<String, String> filters, Map<String, String> sorters) {
-        List<AuctionEntity> auctionsFound = auctionRepo.findAllByAuctionState(AuctionState.INPROGRESS);
+        List<AuctionEntity> auctionsFound = auctionRepo.findByAuctionStateAndEndsAtIsGreaterThan(AuctionState.INPROGRESS, Instant.now()); //findAllByAuctionState(AuctionState.INPROGRESS);
         List<Auction> auctionsToReturn = new ArrayList<>();
         for (AuctionEntity auctionEntity : auctionsFound) {
             auctionsToReturn.add(new Auction(auctionEntity));
@@ -102,7 +114,7 @@ public class AuctionService implements IAuctionService {
     public Auction addBidToAuction(Bid bid, Long id, String authId) {
 
         AuctionEntity auctionEntity = auctionRepo.findByIdAndAuctionState(id, AuctionState.INPROGRESS).orElseThrow(() -> new NotFoundException("No auction with id: " +
-                id + " was found. Please insert a valid auction id."));
+                id + " was found or is no longer active. Please insert a valid auction id."));
         Auction auction = new Auction(auctionEntity);
         AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
         if (bid.getBid() < auction.getStartPrice() ||
@@ -142,7 +154,6 @@ public class AuctionService implements IAuctionService {
         List<Auction> auctionsToReturn = new ArrayList<>();
         for (AuctionEntity auctionEntity : auctionsFound) {
             auctionsToReturn.add(new Auction(auctionEntity));
-            System.out.println(auctionEntity.getDescription());
         }
         return auctionsToReturn;
     }

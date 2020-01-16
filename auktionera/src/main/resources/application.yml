@@ -21,7 +21,19 @@ logging:
     #org.springframework.security: ERROR
 #    org.springframework.boot.autoconfigure: DEBUG
 
+
+auktionera:
+  rabbitmq:
+    exchange: auktionera.exchange
+    queue: auktionera.queue
+    routing-key: auktionera.routingkey
+
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   profiles:
     active: noSecurity
   jpa:
@@ -32,6 +44,7 @@ spring:
     url: jdbc:mysql://localhost:3306/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: Pierdole86
+
 
 
   security:
@@ -46,6 +59,7 @@ spring:
          client-secret:
   main:
     banner-mode: off
+    allow-bean-definition-overriding: true
 
 
 

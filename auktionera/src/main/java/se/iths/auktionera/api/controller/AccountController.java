@@ -6,9 +6,11 @@ import se.iths.auktionera.business.model.AccountRequest;
 import se.iths.auktionera.business.model.Auction;
 import se.iths.auktionera.business.service.IAccountService;
 import se.iths.auktionera.business.service.IAuctionService;
+import se.iths.auktionera.business.service.RabbitMQSender;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +21,18 @@ public class AccountController {
 
     private final IAuctionService auctionService;
 
-    public AccountController(IAccountService accountService, IAuctionService auctionService) {
+    private final RabbitMQSender rabbitMQSender;
+
+    public AccountController(IAccountService accountService, IAuctionService auctionService, RabbitMQSender rabbitMQSender) {
         this.accountService = accountService;
         this.auctionService = auctionService;
+        this.rabbitMQSender = rabbitMQSender;
+    }
+
+    @PostMapping(value = "api/rabbitmq")
+    public String producer(@RequestParam(value = "message") String message) throws IOException {
+        rabbitMQSender.send(message);
+        return "Message sent to the RabbitMQ successfully";
     }
 
     @GetMapping("api/account")

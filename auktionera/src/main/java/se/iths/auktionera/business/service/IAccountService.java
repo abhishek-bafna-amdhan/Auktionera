@@ -8,7 +8,5 @@ import java.util.Map;
 public interface IAccountService {
 
     Account getAccount(String authId);
-
-
     Account updateAccount(String authId, AccountRequest accountRequest);
 }

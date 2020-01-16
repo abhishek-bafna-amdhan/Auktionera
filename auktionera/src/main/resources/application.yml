@@ -28,6 +28,8 @@ auktionera:
     queue: auktionera.queue
     routing-key: auktionera.routingkey
 
+
+
 spring:
   rabbitmq:
     host: localhost

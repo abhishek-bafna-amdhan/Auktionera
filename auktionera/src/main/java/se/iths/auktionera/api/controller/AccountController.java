@@ -1,5 +1,6 @@
 package se.iths.auktionera.api.controller;
 
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 import se.iths.auktionera.business.model.Account;
 import se.iths.auktionera.business.model.AccountRequest;
@@ -29,14 +30,18 @@ public class AccountController {
         this.rabbitMQSender = rabbitMQSender;
     }
 
-    @PostMapping(value = "api/rabbitmq")
-    public String producer(@RequestParam(value = "message") String message) throws IOException {
-        rabbitMQSender.send(message);
-        return "Message sent to the RabbitMQ successfully";
-    }
+/*    @PostMapping(value = "api/rabbitmq")
+    public String producer(@RequestParam(value = "message") String message, HttpServletRequest request) throws IOException {
+        rabbitMQSender.send(message, accountService.getAccount((String) request.getAttribute("authId")).getUser().getUserName());
+        return "Message sent to the RabbitMQ successfully " +
+                accountService.getAccount((String) request.getAttribute("authId")).getUser().getUserName();
+    }*/
 
     @GetMapping("api/account")
-    public Account getAccount(HttpServletRequest request) {
+    public Account getAccount(HttpServletRequest request) throws JSONException {
+        String userName = accountService.getAccount((String) request.getAttribute("authId")).getUser().getUserName();
+        Long userId = accountService.getAccount((String) request.getAttribute("authId")).getUser().getId();
+        rabbitMQSender.send(userName, userId);
         return accountService.getAccount((String) request.getAttribute("authId"));
     }
 

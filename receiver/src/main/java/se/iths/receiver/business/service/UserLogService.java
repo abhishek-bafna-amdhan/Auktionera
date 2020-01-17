@@ -17,7 +17,7 @@ public class UserLogService implements IUserLogService{
 
 
     @Override
-    public void createUserLog(String userName, Long userId) {
+    public void createUserLog(String userName, String userId) {
         UserLogEntity userLogEntity = new UserLogEntity();
         userLogEntity.setUserName(userName);
         userLogEntity.setUserId(userId);

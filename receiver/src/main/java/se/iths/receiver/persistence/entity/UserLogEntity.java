@@ -18,7 +18,7 @@ public class UserLogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long userId;
+    private String userId;
     private String userName;
     private Instant loginStamp;
 }

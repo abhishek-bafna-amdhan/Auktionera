@@ -38,7 +38,7 @@ public class AccountController {
     }*/
 
     @GetMapping("api/account")
-    public Account getAccount(HttpServletRequest request) throws JSONException {
+    public Account getAccount(HttpServletRequest request) {
         String userName = accountService.getAccount((String) request.getAttribute("authId")).getUser().getUserName();
         Long userId = accountService.getAccount((String) request.getAttribute("authId")).getUser().getId();
         rabbitMQSender.send(userName, userId);

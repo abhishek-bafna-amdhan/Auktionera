@@ -35,8 +35,19 @@ public class AuctionService implements IAuctionService {
     public void onStart(ApplicationEvent event){
         List<AuctionEntity> expiredAuctions = auctionRepo.findByAuctionStateAndEndsAtIsLessThanEqual(AuctionState.INPROGRESS, Instant.now());
         if (expiredAuctions.size() > 0 ) {
-            expiredAuctions.forEach(a -> a.setAuctionState(AuctionState.ENDEDNOTBOUGHT));
-            auctionRepo.saveAll(expiredAuctions);
+            for (AuctionEntity auction: expiredAuctions)
+                { if (auction.getCurrentBid() > 0 && auction.getCurrentBidAt().isBefore(auction.getEndsAt())) {
+                    AccountEntity acc = Objects.requireNonNull(accountRepo.findById(auction.getLatestBidder())).orElseThrow();
+                    Optional.of(acc).ifPresent(auction::setBuyer);
+                    auction.setEndedAt(Instant.now());
+                    auction.setAuctionState(AuctionState.ENDEDBOUGHT);
+                    auctionRepo.saveAndFlush(auction);
+                    updateUserStats(auction);
+                } else {
+                    auction.setAuctionState(AuctionState.ENDEDNOTBOUGHT);
+                    auctionRepo.saveAndFlush(auction);
+                }
+            }
             System.out.println("Auction-list has been updated " + event.getTimestamp());
         }
     }
@@ -131,6 +142,7 @@ public class AuctionService implements IAuctionService {
                 return new Auction(updatedAuction);
             }
             Optional.of(bid.getBid()).ifPresent(auctionEntity::setCurrentBid);
+            Optional.of(acc.getId()).ifPresent(auctionEntity::setLatestBidder);
             auctionEntity.setCurrentBidAt(Instant.now());
             AuctionEntity updatedAuction = auctionRepo.saveAndFlush(auctionEntity);
             return new Auction(updatedAuction);

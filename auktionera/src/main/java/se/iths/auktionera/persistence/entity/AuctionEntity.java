@@ -50,6 +50,7 @@ public class AuctionEntity {
     private int buyOutPrice;
     private int minBidStep;
     private int currentBid;
+    private long latestBidder;
 
     @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;

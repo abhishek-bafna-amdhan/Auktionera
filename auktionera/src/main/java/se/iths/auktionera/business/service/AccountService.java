@@ -4,11 +4,8 @@ import org.springframework.stereotype.Service;
 import se.iths.auktionera.business.model.Account;
 import se.iths.auktionera.business.model.AccountRequest;
 import se.iths.auktionera.persistence.entity.AccountEntity;
-import se.iths.auktionera.persistence.entity.UserStatsEntity;
 import se.iths.auktionera.persistence.repo.AccountRepo;
-import se.iths.auktionera.persistence.repo.UserStatsRepo;
 
-import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -16,32 +13,21 @@ import java.util.Optional;
 public class AccountService implements IAccountService {
 
     private final AccountRepo accountRepo;
-    private final UserStatsRepo userStatsRepo;
 
-    public AccountService(AccountRepo accountRepo, UserStatsRepo userStatsRepo) {
+    public AccountService(AccountRepo accountRepo) {
         this.accountRepo = accountRepo;
-        this.userStatsRepo = userStatsRepo;
     }
 
     @Override
-    public Account getAccount(String authId) {
-        AccountEntity acc = accountRepo.findByAuthId(authId);
-
-        if (acc == null) {
-            acc = accountRepo.saveAndFlush(AccountEntity.builder().authId(authId).createdAt(Instant.now()).build());
-            UserStatsEntity use = new UserStatsEntity();
-            acc.setUserStats(use);
-            use.setAccount(acc);
-            userStatsRepo.saveAndFlush(use);
-        }
-        accountRepo.saveAndFlush(acc);
+    public Account getAccount(String userName) {
+        AccountEntity acc = accountRepo.findByUserName(userName);
         return new Account(acc);
     }
 
 
     @Override
-    public Account updateAccount(String authId, AccountRequest accountRequest) {
-        AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
+    public Account updateAccount(String userName, AccountRequest accountRequest) {
+        AccountEntity acc = Objects.requireNonNull(accountRepo.findByUserName(userName));
 
         Optional.ofNullable(accountRequest.getUserName()).ifPresent(acc::setUserName);
         Optional.ofNullable(accountRequest.getEmail()).ifPresent(acc::setEmail);

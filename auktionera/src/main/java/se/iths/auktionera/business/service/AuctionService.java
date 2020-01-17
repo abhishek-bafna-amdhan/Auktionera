@@ -70,8 +70,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public Auction createAuction(String authId, AuctionRequest auctionRequest) {
-        AccountEntity seller = accountRepo.findByAuthId(authId);
+    public Auction createAuction(String userName, AuctionRequest auctionRequest) {
+        AccountEntity seller = accountRepo.findByUserName(userName);
         AuctionEntity auctionToBeCreated = AuctionEntity.builder()
                 .description(auctionRequest.getDescription())
                 .seller(seller)
@@ -108,10 +108,10 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public void deleteAuctionById(Long id, String authId) {
+    public void deleteAuctionById(Long id, String userName) {
         AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +
                 id + " was found. Please insert a valid auction id."));
-        AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
+        AccountEntity acc = Objects.requireNonNull(accountRepo.findByUserName(userName));
         acc.getAuctionEntities().remove(auctionEntity);
         CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(auctionEntity.getCategory().getCategoryTitle()).orElseThrow();
         categoryEntity.getAuctions().remove(auctionEntity);
@@ -122,12 +122,12 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public Auction addBidToAuction(Bid bid, Long id, String authId) {
+    public Auction addBidToAuction(Bid bid, Long id, String userName) {
 
         AuctionEntity auctionEntity = auctionRepo.findByIdAndAuctionState(id, AuctionState.INPROGRESS).orElseThrow(() -> new NotFoundException("No auction with id: " +
                 id + " was found or is no longer active. Please insert a valid auction id."));
         Auction auction = new Auction(auctionEntity);
-        AccountEntity acc = Objects.requireNonNull(accountRepo.findByAuthId(authId));
+        AccountEntity acc = Objects.requireNonNull(accountRepo.findByUserName(userName));
         if (bid.getBid() < auction.getStartPrice() ||
                 bid.getBid() <= auction.getCurrentBid()) throw new InvalidBidException("Cannot bid lower than starting price: " +
                 auction.getStartPrice() + " or lower than the current bid: " + auction.getCurrentBid());
@@ -160,8 +160,8 @@ public class AuctionService implements IAuctionService {
     }
 
     @Override
-    public List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId) {
-        AccountEntity accountEntity = accountRepo.findByAuthId(authId);
+    public List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String userName) {
+        AccountEntity accountEntity = accountRepo.findByUserName(userName);
         List<AuctionEntity> auctionsFound = accountEntity.getAuctionEntities();
         List<Auction> auctionsToReturn = new ArrayList<>();
         for (AuctionEntity auctionEntity : auctionsFound) {

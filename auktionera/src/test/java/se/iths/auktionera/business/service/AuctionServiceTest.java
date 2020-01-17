@@ -108,7 +108,7 @@ class AuctionServiceTest {
     @Test
     void createAuction() {
         //when(auctionRepo.saveAndFlush(any(AuctionEntity.class))).thenReturn(auctionEntity);
-        when(accountRepo.findByAuthId(any())).thenReturn(accountEntity);
+        when(accountRepo.findByUserName(any())).thenReturn(accountEntity);
 
         Auction auctionAdded = auctionService.createAuction(accountEntity.getAuthId(), auctionRequest);
         assertNotNull(auctionAdded);

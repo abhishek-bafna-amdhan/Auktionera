@@ -31,8 +31,8 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public Review createReview(ReviewRequest reviewRequest, Long id, String authId) {
-        AccountEntity acc = accountRepo.findByAuthId(authId);
+    public Review createReview(ReviewRequest reviewRequest, Long id, String userName) {
+        AccountEntity acc = accountRepo.findByUserName(userName);
         AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +
                 id + " was found. Please insert a valid auction id."));
         ReviewEntity reviewToSave = ReviewEntity.builder()

@@ -1,5 +1,6 @@
 package se.iths.auktionera.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,6 +36,9 @@ public class AccountEntity {
     private String streetName = StringUtils.EMPTY;
     private int postNr;
     private String city = StringUtils.EMPTY;
+
+    @JsonIgnore
+    private String password;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<AuctionEntity> auctionEntities = new ArrayList<>();

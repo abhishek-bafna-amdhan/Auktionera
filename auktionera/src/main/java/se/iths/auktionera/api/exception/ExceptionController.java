@@ -26,4 +26,9 @@ public class ExceptionController {
     public ResponseEntity<Object> handleInvalidCategoryException(InvalidCategoryException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
+
+    @ExceptionHandler(value = ExistingUsernameException.class)
+    public ResponseEntity<Object> handleExistingUsernameException(ExistingUsernameException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+    }
 }

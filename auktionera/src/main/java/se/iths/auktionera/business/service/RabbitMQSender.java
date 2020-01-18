@@ -28,7 +28,7 @@ public class RabbitMQSender {
 
     @Scheduled
     public void send(String userName, Long id) {
-        rabbitTemplate.convertAndSend(exchange, routingkey, userName + "-" + " " + id);
-        System.out.println("Send message to consumer= " + userName + " " + "" + " id:" + id);
+        rabbitTemplate.convertAndSend(exchange, routingkey, userName + "-" + id);
+        System.out.println("Send message to consumer= " + userName + "-" + id);
     }
 }

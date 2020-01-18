@@ -15,7 +15,6 @@ public class UserLogService implements IUserLogService{
         this.userLogRepo = userLogRepo;
     }
 
-
     @Override
     public void createUserLog(String userName, String userId) {
         UserLogEntity userLogEntity = new UserLogEntity();

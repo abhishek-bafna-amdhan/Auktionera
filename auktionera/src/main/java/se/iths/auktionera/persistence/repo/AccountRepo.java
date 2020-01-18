@@ -7,9 +7,5 @@ import se.iths.auktionera.persistence.entity.AuctionEntity;
 import java.util.List;
 
 public interface AccountRepo extends JpaRepository<AccountEntity, Long> {
-//    AccountEntity findByAuthId(String authId);
-
-    List<AuctionEntity> findAllByAuthId(String authId);
-
     AccountEntity findByUserName(String username);
 }

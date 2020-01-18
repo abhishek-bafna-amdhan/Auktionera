@@ -14,7 +14,6 @@ import se.iths.auktionera.persistence.repo.ReviewRepo;
 import se.iths.auktionera.persistence.repo.UserStatsRepo;
 
 import java.time.Instant;
-import java.util.Optional;
 
 @Service
 public class ReviewService implements IReviewService {

@@ -39,19 +39,19 @@ public class AccountController {
 
     @GetMapping("api/account")
     public Account getAccount(HttpServletRequest request) {
-        String userName = accountService.getAccount((String) request.getUserPrincipal().getName()).getUser().getUserName();
-        Long userId = accountService.getAccount((String) request.getUserPrincipal().getName()).getUser().getId();
+        String userName = accountService.getAccount(request.getUserPrincipal().getName()).getUser().getUserName();
+        Long userId = accountService.getAccount(request.getUserPrincipal().getName()).getUser().getId();
         rabbitMQSender.send(userName, userId);
-        return accountService.getAccount((String) request.getUserPrincipal().getName());
+        return accountService.getAccount(request.getUserPrincipal().getName());
     }
 
     @PatchMapping("api/account")
     public Account updateAccount(@Valid @RequestBody AccountRequest fields, HttpServletRequest request) {
-        return accountService.updateAccount((String) request.getUserPrincipal().getName(), fields);
+        return accountService.updateAccount(request.getUserPrincipal().getName(), fields);
     }
 
     @GetMapping("api/account/auctions")
     public List<Auction> getAllAuctionsForAccount(@RequestParam Map<String, String> filter, @RequestParam Map<String, String> sort, HttpServletRequest request) {
-        return auctionService.getAuctionsForOneAccount(filter, sort, (String) request.getUserPrincipal().getName());
+        return auctionService.getAuctionsForOneAccount(filter, sort, request.getUserPrincipal().getName());
     }
 }

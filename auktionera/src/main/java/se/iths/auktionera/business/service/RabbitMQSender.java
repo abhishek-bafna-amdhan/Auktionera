@@ -3,8 +3,6 @@ package se.iths.auktionera.business.service;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +28,7 @@ public class RabbitMQSender {
 
     @Scheduled
     public void send(String userName, Long id) {
-        rabbitTemplate.convertAndSend(exchange, routingkey, userName + "-"+id);
+        rabbitTemplate.convertAndSend(exchange, routingkey, userName + "-"+ " " + id);
         System.out.println("Send message to consumer= " + userName + "" + " id:" + id);
     }
 }

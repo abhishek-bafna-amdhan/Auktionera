@@ -38,21 +38,21 @@ public class AuctionController {
 
     @PostMapping("api/auctions")
     public Auction createAuction(@RequestBody AuctionRequest fields, HttpServletRequest request) {
-        return auctionService.createAuction((String) request.getUserPrincipal().getName(), fields);
+        return auctionService.createAuction(request.getUserPrincipal().getName(), fields);
     }
 
     @PostMapping("api/auctions/{id}/bid")
     public Auction createBid(@RequestBody Bid bid, @PathVariable Long id, HttpServletRequest request) {
-        return auctionService.addBidToAuction(bid, id, (String) request.getUserPrincipal().getName());
+        return auctionService.addBidToAuction(bid, id, request.getUserPrincipal().getName());
     }
 
     @DeleteMapping("api/auctions/{id}")
     public void deleteAuction(@PathVariable Long id, HttpServletRequest request) {
-        auctionService.deleteAuctionById(id, (String) request.getUserPrincipal().getName());
+        auctionService.deleteAuctionById(id, request.getUserPrincipal().getName());
     }
 
     @PostMapping("api/auctions/{id}/review")
     public void createReview(@RequestBody ReviewRequest reviewRequest, @PathVariable Long id, HttpServletRequest request){
-        reviewService.createReview(reviewRequest, id, (String) request.getUserPrincipal().getName());
+        reviewService.createReview(reviewRequest, id, request.getUserPrincipal().getName());
     }
 }

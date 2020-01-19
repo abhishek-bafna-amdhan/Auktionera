@@ -1,7 +1,9 @@
 server:
-  port: 8081
+  port: 8080
   error:
     include-stacktrace: on_trace_param
+
+
 
 logging:
   level:
@@ -14,7 +16,7 @@ logging:
               tomcat:
                 TomcatWebServer: INFO
 
-auktionera:
+
   rabbitmq:
     exchange: auktionera.exchange
     queue: auktionera.queue
@@ -31,9 +33,9 @@ spring:
     #generate-ddl: true
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3308/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: petros
-    password: root
+    url: jdbc:mysql://localhost:3306/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: Pierdole86
   main:
     banner-mode: off
     allow-bean-definition-overriding: true

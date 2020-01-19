@@ -31,12 +31,12 @@ spring:
     username: guest
     password: guest
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create-drop
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3308/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: petros
-    password: root
+    url: jdbc:mysql://localhost:3306/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: Pierdole86
 
   main:
     banner-mode: off

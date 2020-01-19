@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/favicon.ico",
                 "/**/*.html",
                 "/**/*.css",
-                "/**/*.js","/authenticate", "/register").permitAll()
+                "/**/*.js","/api/authenticate", "/api/register").permitAll()
                 .
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().

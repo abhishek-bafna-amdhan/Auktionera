@@ -44,7 +44,7 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "api/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user, (String) request.getAttribute("authId")));
+        return ResponseEntity.ok(userDetailsService.save(user));
     }
 
     private void authenticate(String username, String password) throws Exception {

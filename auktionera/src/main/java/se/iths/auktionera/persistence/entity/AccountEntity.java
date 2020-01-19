@@ -24,11 +24,8 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
-    @Column(unique = true, nullable = false, updatable = false)
-    private String authId;
-
-    private String userName = StringUtils.EMPTY;
+    @Column(unique = true)
+    private String userName;
 
     private String email = StringUtils.EMPTY;
     private boolean anonymousBuyer;

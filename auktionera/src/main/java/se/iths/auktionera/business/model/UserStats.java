@@ -15,10 +15,4 @@ public class UserStats {
     private double buyerRating;
     private String reviewComments;
 
-    public UserStats(UserStatsEntity ent){
-        this.totalSales = ent.getTotalSales();
-        this.totalPurchases = ent.getTotalPurchases();
-        this.sellerRating = ent.getSellerRating();
-        this.buyerRating = ent.getBuyerRating();
-    }
 }

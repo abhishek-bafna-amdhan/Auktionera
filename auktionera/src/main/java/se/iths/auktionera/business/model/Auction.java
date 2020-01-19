@@ -20,7 +20,7 @@ public class Auction {
 
     private long auctionId;
     private String category;
-    private List<String> tags = new ArrayList<>(); //for the moment changed to String, should be changed into List or own Object
+    private List<String> tags = new ArrayList<>();
     private String description;
     private User seller;
 
@@ -78,7 +78,7 @@ public class Auction {
         this.buyOutPrice = auctionEntity.getBuyOutPrice();
         this.minBidStep = auctionEntity.getMinBidStep();
         this.currentBid = auctionEntity.getCurrentBid();
-        this.deliveryType = (DeliveryType) auctionEntity.getDeliveryType();
+        this.deliveryType = auctionEntity.getDeliveryType();
     }
 
     public List<String> convertToList(Set<TagsEntity> tags){

@@ -14,11 +14,11 @@ public class RabbitMQ {
     }
 
     @RabbitListener(queues = "${auktionera.rabbitmq.queue}")
-    public void recievedMessage(String message) {
+    public void receivedMessage(String message) {
         String userName = message.substring(0, message.lastIndexOf("-"));
-        String userId = message.substring(message.lastIndexOf("-") +1);
+        String userId = message.substring(message.lastIndexOf("-") + 1);
         userLogService.createUserLog(userName, userId);
-        System.out.println("Recieved Message from RabbitMQ: " + message);
+        System.out.println("Received Message from RabbitMQ: " + message);
     }
 }
 

@@ -38,15 +38,6 @@ public class UserStatsEntity {
         return calculateBuyerAverage(this.id);
     }
 
-    public UserStatsEntity(ReviewEntity reviewToSave, AccountEntity account) {
-        this.account = account;
-        this.reviewEntities.add(reviewToSave);
-        this.sellerRating = calculateSellerAverage(account.getId());
-        this.buyerRating = calculateBuyerAverage(account.getId());
-        this.totalPurchases++;
-        this.totalSales++;
-    }
-
     @Transient
     private Double calculateSellerAverage(Long id){
         List<Double> sum = new ArrayList<>();

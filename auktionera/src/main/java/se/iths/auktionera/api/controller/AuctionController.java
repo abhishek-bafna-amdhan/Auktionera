@@ -1,6 +1,7 @@
 package se.iths.auktionera.api.controller;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import se.iths.auktionera.api.IncomingQueryEvent;
 import se.iths.auktionera.business.model.*;
@@ -52,6 +53,7 @@ public class AuctionController {
     }
 
     @PostMapping("api/auctions/{id}/review")
+    @ResponseStatus(HttpStatus.CREATED)
     public void createReview(@RequestBody ReviewRequest reviewRequest, @PathVariable Long id, HttpServletRequest request){
         reviewService.createReview(reviewRequest, id, request.getUserPrincipal().getName());
     }

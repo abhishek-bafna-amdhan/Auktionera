@@ -109,7 +109,7 @@ class AuctionServiceTest {
         //when(auctionRepo.saveAndFlush(any(AuctionEntity.class))).thenReturn(auctionEntity);
         when(accountRepo.findByUserName(any())).thenReturn(accountEntity);
 
-        Auction auctionAdded = auctionService.createAuction(accountEntity.getAuthId(), auctionRequest);
+        Auction auctionAdded = auctionService.createAuction(accountEntity.getuserName(), auctionRequest);
         assertNotNull(auctionAdded);
         assertThat(auctionAdded.getDescription(), is("Electronics"));
         assertThat(auctionAdded.getStartPrice(), is(100));

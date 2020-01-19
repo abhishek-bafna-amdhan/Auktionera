@@ -32,9 +32,9 @@ public class AccountController {
 
 /*    @PostMapping(value = "api/rabbitmq")
     public String producer(@RequestParam(value = "message") String message, HttpServletRequest request) throws IOException {
-        rabbitMQSender.send(message, accountService.getAccount((String) request.getAttribute("authId")).getUser().getUserName());
+        rabbitMQSender.send(message, accountService.getAccount((String) request.getAttribute("userName")).getUser().getUserName());
         return "Message sent to the RabbitMQ successfully " +
-                accountService.getAccount((String) request.getAttribute("authId")).getUser().getUserName();
+                accountService.getAccount((String) request.getAttribute("userName")).getUser().getUserName();
     }*/
 
     @GetMapping("api/account")

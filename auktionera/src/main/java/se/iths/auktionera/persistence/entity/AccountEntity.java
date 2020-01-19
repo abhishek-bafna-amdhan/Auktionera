@@ -24,9 +24,6 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-/*    @Column(unique = true, nullable = false, updatable = false)
-    private String authId;*/
-
     @Column(unique = true)
     private String userName;
 

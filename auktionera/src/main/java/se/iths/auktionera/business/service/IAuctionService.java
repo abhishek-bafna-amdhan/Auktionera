@@ -12,11 +12,11 @@ public interface IAuctionService {
 
     Auction getAuctionById(long id);
 
-    Auction createAuction(String authId, AuctionRequest auctionRequest);
+    Auction createAuction(String userName, AuctionRequest auctionRequest);
 
-    void deleteAuctionById(Long id, String authId);
+    void deleteAuctionById(Long id, String userName);
 
-    Auction addBidToAuction(Bid bid, Long id, String authId);
+    Auction addBidToAuction(Bid bid, Long id, String userName);
 
-    List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String authId);
+    List<Auction> getAuctionsForOneAccount(Map<String, String> filters, Map<String, String> sorters, String userName);
 }

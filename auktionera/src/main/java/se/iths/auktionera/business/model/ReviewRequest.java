@@ -12,8 +12,4 @@ import java.time.Instant;
 public class ReviewRequest {
     private double rating;
     private String reviewText;
-    private Instant createdAt;
-    private Instant lastEditAt;
-    private boolean isSeller;
-    private boolean isBuyer;
 }

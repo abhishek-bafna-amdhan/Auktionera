@@ -1,6 +1,5 @@
 package se.iths.auktionera.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,6 +11,7 @@ import se.iths.auktionera.api.config.JwtTokenUtil;
 import se.iths.auktionera.business.model.JwtRequest;
 import se.iths.auktionera.business.model.JwtResponse;
 import se.iths.auktionera.business.model.UserDTO;
+import se.iths.auktionera.business.service.AccountService;
 import se.iths.auktionera.business.service.JwtUserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,16 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 @CrossOrigin
 public class JwtAuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
+    private final JwtUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "api/authenticate", method = RequestMethod.POST)
+    private final AccountService accountService;
+
+    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService userDetailsService, AccountService accountService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+        this.accountService = accountService;
+    }
+
+    @PostMapping("api/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -42,9 +48,9 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @RequestMapping(value = "api/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user));
+    @PostMapping("api/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO user, HttpServletRequest request) throws Exception {
+        return ResponseEntity.ok(accountService.createAccount(user));
     }
 
     private void authenticate(String username, String password) throws Exception {

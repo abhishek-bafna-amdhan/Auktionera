@@ -20,14 +20,11 @@ import java.util.ArrayList;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private AccountRepo accountRepo;
+    private final AccountRepo accountRepo;
 
-    @Autowired
-    private UserStatsRepo userStatsRepo;
-
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
+    public JwtUserDetailsService(AccountRepo accountRepo) {
+        this.accountRepo = accountRepo;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -37,21 +34,5 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
         return new User(user.getUserName(), user.getPassword(),
                 new ArrayList<>());
-    }
-
-    public AccountEntity save(UserDTO user) throws ExistingUsernameException {
-        if (accountRepo.findByUserName(user.getUsername()) == null) {
-            AccountEntity newUser = new AccountEntity();
-            newUser.setUserName(user.getUsername());
-            newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-            newUser.setCreatedAt(Instant.now());
-            UserStatsEntity use = new UserStatsEntity();
-            newUser.setUserStats(use);
-            userStatsRepo.saveAndFlush(use);
-            accountRepo.saveAndFlush(newUser);
-            return newUser;
-        } else {
-            throw new ExistingUsernameException("This username already exists. Try another.");
-        }
     }
 }

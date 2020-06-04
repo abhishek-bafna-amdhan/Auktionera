@@ -4,7 +4,7 @@ server:
     include-stacktrace: on_trace_param
 
 jwt:
-  secret: ithscomplexjava
+  secret: ithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjava
 
 logging:
   level:
@@ -34,9 +34,9 @@ spring:
     hibernate.ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password: Pierdole86
+    url: jdbc:mysql://localhost:3308/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: petros
+    password: root
 
   main:
     banner-mode: off

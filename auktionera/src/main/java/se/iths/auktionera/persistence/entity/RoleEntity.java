@@ -6,20 +6,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tags")
+@Table(name = "roles")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TagsEntity {
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String tag;
+    private String role;
 
-    @ManyToMany(mappedBy = "tags")
-    private Set<AuctionEntity> auctions = new HashSet<>();
+    @ManyToMany(mappedBy = "roles")
+    private Set<AccountEntity> accountEntities = new HashSet<>();
 }

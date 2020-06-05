@@ -3,9 +3,6 @@ server:
   error:
     include-stacktrace: on_trace_param
 
-jwt:
-  secret: ithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjavaithscomplexjava
-
 logging:
   level:
     root: WARN

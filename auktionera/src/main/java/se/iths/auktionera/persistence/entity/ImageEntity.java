@@ -21,7 +21,7 @@ public class ImageEntity {
 
     private String contentType;
 
-    @Column(length = 1000) //columnDefinition="mediumblob"
+    @Column(length = 2000, columnDefinition="mediumblob")
     private byte[] data;
 
     @ManyToOne

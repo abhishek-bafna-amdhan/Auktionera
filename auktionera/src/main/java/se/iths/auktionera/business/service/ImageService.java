@@ -47,6 +47,7 @@ public class ImageService implements IImageService {
                 .data(file.getBytes())
                 .contentType(file.getContentType())
                 .description(file.getName())
+                .auction(auctionEntity)
                 .build();
         imageRepo.saveAndFlush(imageEntity);
         auctionEntity.getImages().add(imageEntity);
@@ -56,9 +57,10 @@ public class ImageService implements IImageService {
 
     private void isImage(MultipartFile file) {
         if (!Arrays.asList(
-                IMAGE_JPEG.getType(),
-                IMAGE_PNG.getType(),
-                IMAGE_GIF.getType()).contains(file.getContentType())) {
+                "image/jpg",
+                "image/jpeg",
+                "image/png",
+                "image/gif").contains(file.getContentType())) {
             throw new IllegalStateException("File must be an image [" + file.getContentType() + "]");
         }
     }

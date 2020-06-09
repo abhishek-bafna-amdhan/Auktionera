@@ -34,10 +34,12 @@ spring:
     url: jdbc:mysql://localhost:3308/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: petros
     password: root
-
   main:
     banner-mode: off
     allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
 
 
 

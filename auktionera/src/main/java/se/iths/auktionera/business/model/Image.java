@@ -1,6 +1,7 @@
 package se.iths.auktionera.business.model;
 
 import lombok.*;
+import se.iths.auktionera.persistence.entity.ImageEntity;
 
 @Getter
 @Setter
@@ -8,8 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Image {
-    private Long id;
+
     private String description;
+    private byte[] data;
 
-
+    public Image(ImageEntity i) {
+        this.description = i.getDescription();
+        this.data = i.getData();
+    }
 }

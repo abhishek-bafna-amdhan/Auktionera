@@ -3,24 +3,27 @@ package se.iths.auktionera.persistence.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "images")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryEntity {
+public class ImageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String categoryTitle;
+    private String description;
 
-    @OneToMany
-    private List<AuctionEntity> auctions = new ArrayList<>();
+    private String contentType;
+
+    @Column(length = 1000) //columnDefinition="mediumblob"
+    private byte[] data;
+
+    @ManyToOne
+    private AuctionEntity auction;
 }

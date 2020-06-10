@@ -24,15 +24,13 @@ class login extends Component {
         const { username, password } = this.state;
 
         const body = `{ "username": "` + username + `", "password": "`+ password + `" }`;
-        console.log(body);
-        
+
         axios.post(endpoint, body, {
             headers: {
                 "Authorization": "Bearer ",
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            console.log(res.data.jwttoken);
             localStorage.setItem("Authorization", res.data.jwttoken);
             return this.handleDashboard();
         });
@@ -44,14 +42,7 @@ class login extends Component {
     }
 
     handleDashboard() {
-        axios.get("http://localhost:8080/api/account").then(res => {
-            console.log(res);
-          if (res.status === 200) {
-            this.props.history.push("/dashboard");
-          } else {
-            alert("Authentication failure");
-          }
-        });
+        this.props.history.push("/dashboard");
       }
 
     render() {

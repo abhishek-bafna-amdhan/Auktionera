@@ -1,7 +1,6 @@
 package se.iths.auktionera.api.controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import se.iths.auktionera.business.model.Image;
@@ -26,11 +25,11 @@ public class ImageController {
         return imageService.getImagesForAuction(id);
     }
 
-    @PostMapping(value = "upload/{id}",
-        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    @PostMapping(
+            value = "upload/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<Image> storeUserImage(@PathVariable Long id, @RequestParam MultipartFile file) throws IOException {
+    public void storeUserImage(@PathVariable Long id, @RequestParam MultipartFile file) throws IOException {
         imageService.storeImage(id, file);
-        return ResponseEntity.ok(new Image(file));
     }
 }

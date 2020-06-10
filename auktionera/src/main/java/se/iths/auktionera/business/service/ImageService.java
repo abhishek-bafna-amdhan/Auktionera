@@ -12,8 +12,7 @@ import se.iths.auktionera.persistence.repo.ImageRepo;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.springframework.http.MediaType.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ImageService implements IImageService {
@@ -32,7 +31,7 @@ public class ImageService implements IImageService {
         AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +
                 id + " was found. Please insert a valid auction id."));
 
-        return (List<Image>) auctionEntity.getImages().stream().map(Image::new);
+        return auctionEntity.getImages().stream().map(i -> new Image(i.getDescription(), i.getTitle(), i.getData())).collect(Collectors.toList());
     }
 
     @Override
@@ -47,6 +46,7 @@ public class ImageService implements IImageService {
                 .data(file.getBytes())
                 .contentType(file.getContentType())
                 .description(file.getName())
+                .title(file.getOriginalFilename())
                 .auction(auctionEntity)
                 .build();
         imageRepo.saveAndFlush(imageEntity);

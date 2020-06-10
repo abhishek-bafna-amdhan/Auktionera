@@ -18,7 +18,7 @@ public class ImageEntity {
     private long id;
 
     private String description;
-
+    private String title;
     private String contentType;
 
     @Column(length = 2000, columnDefinition="mediumblob")

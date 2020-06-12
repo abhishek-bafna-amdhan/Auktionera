@@ -33,7 +33,7 @@ function Dropzone() {
     const formData = new FormData();
     formData.append("file", file);
 
-    Axios.post("http://localhost:8080/api/images/upload/3", formData, 
+    Axios.post("http://localhost:8080/api/images/upload/1", formData, 
     {
       headers: {
         "Content-Type": "multipart/form-data"

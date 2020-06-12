@@ -32,8 +32,8 @@ spring:
     show-sql: true
   datasource:
     url: jdbc:mysql://localhost:3308/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: petros
-    password: root
+    username:
+    password:
   main:
     banner-mode: off
     allow-bean-definition-overriding: true

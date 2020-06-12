@@ -11,5 +11,5 @@ INSERT INTO `auktionera`.`categories` (`id`, `category_title`) VALUES (10, 'shoe
 
 INSERT INTO `auktionera`.`roles` (`id`, `role`) VALUES (1, 'ADMIN');
 INSERT INTO `auktionera`.`roles` (`id`, `role`) VALUES (2, 'USER');
-INSERT INTO accounts_roles (account_entities_id, roles_id) VALUES (1, 1);
-INSERT INTO accounts_roles (account_entities_id, roles_id) VALUES (2, 2);
+INSERT INTO accounts (id, anonymous_buyer, city, email, password, post_nr, street_name, user_name) VALUES (1,false, 'Göteborg', 'admin@admin.se', 'admin', 41010, 'Skånegatan 3', 'admin');
+INSERT INTO accounts_roles (account_entities_id, roles_id) VALUES (1,1);

@@ -25,7 +25,6 @@ public class ImageService implements IImageService {
         this.imageRepo = imageRepo;
     }
 
-
     @Override
     public List<Image> getImagesForAuction(Long id) {
         AuctionEntity auctionEntity = auctionRepo.findById(id).orElseThrow(() -> new NotFoundException("No auction with id: " +

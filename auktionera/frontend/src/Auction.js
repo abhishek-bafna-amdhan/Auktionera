@@ -5,7 +5,7 @@ const ActiveAuction = () => {
     const [auction, setAuction] = useState([]);
   
     const fetchActiveAuction = () => {
-      Axios.get("http://localhost:8080/api/auctions/3").then(res => {
+      Axios.get("http://localhost:8080/api/auctions/1").then(res => {
       console.log(res.data);  
       setAuction(res.data);
       })
@@ -18,8 +18,8 @@ const ActiveAuction = () => {
 
     return (
         <div>
-            <p>Auction nr. 3 </p>
-            <p>{auction.description}</p>
+            <p>Auction nr. {auction.auctionId} </p>
+            <p>Description: {auction.description}</p>
             <p>Category: {auction.category}</p>
             <p>Starting price: {auction.startPrice}</p>
         </div>
@@ -30,7 +30,7 @@ const ActiveAuction = () => {
     const [images, setImages] = useState([]);
 
     const fetchAuctionImages = () => {
-        Axios.get("http://localhost:8080/api/images/3").then(res => {
+        Axios.get("http://localhost:8080/api/images/1").then(res => {
             console.log(res.data);
             setImages(res.data);
         })

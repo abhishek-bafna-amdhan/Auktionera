@@ -7,6 +7,7 @@ import se.iths.auktionera.business.model.DeliveryType;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,6 +39,9 @@ public class AuctionEntity {
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private AccountEntity buyer;
+
+    @OneToMany
+    private List<ImageEntity> images;
 
     @Enumerated(EnumType.STRING)
     private AuctionState auctionState;

@@ -3,6 +3,7 @@ package se.iths.auktionera.persistence.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,5 +22,5 @@ public class CategoryEntity {
     private String categoryTitle;
 
     @OneToMany
-    private List<AuctionEntity> auctions;
+    private List<AuctionEntity> auctions = new ArrayList<>();
 }

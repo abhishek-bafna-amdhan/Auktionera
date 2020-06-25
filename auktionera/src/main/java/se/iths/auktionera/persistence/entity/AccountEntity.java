@@ -45,4 +45,8 @@ public class AccountEntity {
 
     @OneToOne
     private UserStatsEntity userStats;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "accounts_roles")
+    private Set<RoleEntity> roles = new HashSet<>();
 }

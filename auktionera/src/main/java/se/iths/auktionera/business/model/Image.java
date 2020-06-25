@@ -1,6 +1,10 @@
 package se.iths.auktionera.business.model;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+import se.iths.auktionera.persistence.entity.ImageEntity;
+
+import java.io.IOException;
 
 @Getter
 @Setter
@@ -8,8 +12,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Image {
-    private Long id;
-    private String description;
 
+    private String description;
+    private String title;
+    private byte[] data;
 
 }

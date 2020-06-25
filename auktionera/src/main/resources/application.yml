@@ -3,9 +3,6 @@ server:
   error:
     include-stacktrace: on_trace_param
 
-jwt:
-  secret: ithscomplexjava
-
 logging:
   level:
     root: WARN
@@ -34,13 +31,15 @@ spring:
     hibernate.ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password: Pierdole86
-
+    url: jdbc:mysql://localhost:3308/auktionera?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username:
+    password:
   main:
     banner-mode: off
     allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
 
 
 

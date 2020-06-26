@@ -74,9 +74,9 @@ class dashboard extends Component {
       <div>
         <h1>WELCOME HOME</h1>
         <UserProfile></UserProfile>
-        <a>
+        <Button>
           <span>Create auction</span>
-        </a><br/>
+        </Button><br/>
         <Button
           onClick={this.handleLogout}>
           <i></i>

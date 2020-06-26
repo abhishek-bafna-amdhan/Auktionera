@@ -1,23 +1,25 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter, Route } from "react-router-dom";
+import { Switch , Route } from "react-router-dom";
 import login from "./login";
 import dashboard from "./Dashboard";
 import interceptors from "./Interceptors";
-import auction from "./Auction";
+import Header from "./components/Header";
+import NotFoundPage from "./NotFoundPage";
+import AuctionList from "./AuctionList";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">       
+      <Header />
         <img src={logo} className="App-logo" alt="logo" />
-        <BrowserRouter>
+        <Switch>
           <Route exact path="/" component={login} />
-          <Route exact path="/dashboard" component={dashboard} />
-          <Route exact path="/auction" component={auction}/>
-        </BrowserRouter>
-      </header>
+          <Route path="/dashboard" component={dashboard} />
+          <Route path="/auctions" component={AuctionList}/>
+          <Route component={NotFoundPage} />
+        </Switch>
     </div>
   );
 }

@@ -8,16 +8,17 @@ import interceptors from "./Interceptors";
 import Header from "./components/Header";
 import NotFoundPage from "./NotFoundPage";
 import AuctionList from "./AuctionList";
+import AboutPage from "./components/AboutPage";
 
 function App() {
   return (
     <div className="App">
       <Header />
-        <img src={logo} className="App-logo" alt="logo" />
         <Switch>
           <Route exact path="/" component={login} />
           <Route path="/dashboard" component={dashboard} />
           <Route path="/auctions" component={AuctionList}/>
+          <Route path="/about" component={AboutPage}/>
           <Route component={NotFoundPage} />
         </Switch>
     </div>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import AuctionList from "./AuctionList";
 import Axios from "axios";
 
-const AuctionList = () => {
+const AuctionsPage = () => {
     const [auctions, setAuctions] = useState([]);
   
     const fetchAllAuctions = () => {
@@ -12,17 +13,14 @@ const AuctionList = () => {
     }
 
     useEffect(() => {
-      fetchAllAuctions();
-    }, []);
+        fetchAllAuctions();
+      }, []);
 
-    return auctions.map((auction, index) => {
-        return (
-            <div key={index}>
-                <p>{auction.description}</p>
-                <p>{index}</p>
-
-            </div>
-        );
-    });
+    return (
+        <>
+        <h2>Active Auctions</h2>
+        <AuctionList auctions={auctions}></AuctionList>
+        </>
+    );
 }
-export default AuctionList;
+export default AuctionsPage;

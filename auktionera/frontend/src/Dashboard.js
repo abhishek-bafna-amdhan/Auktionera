@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import Axios from "axios";
 import {useDropzone} from 'react-dropzone';
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   const [userProfile, setUserProfile] = useState([]);
@@ -74,9 +75,9 @@ class dashboard extends Component {
       <div>
         <h1>WELCOME HOME</h1>
         <UserProfile></UserProfile>
-        <Button>
+        <Link className="btn btn-primary" to="/newauction">
           <span>Create auction</span>
-        </Button><br/>
+        </Link><br/>
         <Button
           onClick={this.handleLogout}>
           <i></i>

@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import NotFoundPage from "./NotFoundPage";
 import AuctionsPage from "./components/AuctionsPage";
 import AboutPage from "./components/AboutPage";
+import CreateAuctionPage from "./components/CreateAuctionPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route exact path="/" component={login} />
           <Route path="/dashboard" component={dashboard} />
           <Route path="/auctions" component={AuctionsPage}/>
+          <Route path="/newauction" component={CreateAuctionPage} />
           <Route path="/about" component={AboutPage}/>
           <Route component={NotFoundPage} />
         </Switch>

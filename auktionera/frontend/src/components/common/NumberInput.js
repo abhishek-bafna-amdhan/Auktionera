@@ -1,7 +1,7 @@
 import React from "react";
 
-function TextInput(props) {
-    let wrapperClass = "form-group";
+function NumberInput(props) {
+    let wrapperClass = "form-group col-md-4";
     if (props.error && props.error.length < 0) {
         wrapperClass += " has-error";
     }
@@ -11,7 +11,7 @@ function TextInput(props) {
             <div className="field">
                 <input
                     id={props.id}
-                    type="text"
+                    type="number"
                     onChange={props.onChange}
                     name={props.name}
                     className="form-control"
@@ -24,4 +24,4 @@ function TextInput(props) {
         </div>
     );
 }
-export default TextInput;
+export default NumberInput;

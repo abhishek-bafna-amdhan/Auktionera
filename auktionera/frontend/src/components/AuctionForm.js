@@ -1,5 +1,6 @@
 import React from "react";
 import TextInput from "./common/TextInput";
+import NumberInput from "./common/NumberInput";
 
 function AuctionForm(props) {
     return (
@@ -7,45 +8,40 @@ function AuctionForm(props) {
             <TextInput
                 id="description"
                 label="Description"
-                onChange={props.onChange}
                 name="description"
+                onChange={props.onChange}
+                error={props.errors.description}
             />
             <TextInput
                 id="category"
                 label="Category"
-                onChange={props.onChange}
                 name="category"
+                onChange={props.onChange}
+                error={props.errors.category}
             />
-            <div className="form-group">
-                <label htmlFor="startPrice">Starting price</label>
-                <input
-                    type="number"
-                    className="form-control"
-                    name="startPrice"
-                    value={props.auction.startPrice}
-                    onChange={props.onChange}
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="buyoutPrice">Buyout price</label>
-                <input
-                    type="number"
-                    className="form-control"
-                    name="buyoutPrice"
-                    value={props.auction.buyoutPrice}
-                    onChange={props.onChange}
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="minBidStep">Minimum bidding</label>
-                <input
-                    type="number"
-                    className="form-control"
-                    name="minBidStep"
-                    value={props.auction.minBidStep}
-                    onChange={props.onChange}
-                />
-            </div>
+            <NumberInput
+                id="startPrice"
+                label="Starting price"
+                name="startPrice"
+                onChange={props.onChange}
+                value={props.auction.startPrice}
+                error={props.errors.startPrice}
+            />
+            <NumberInput
+                id="buyoutPrice"
+                label="Buyout price"
+                name="buyoutPrice"
+                onChange={props.onChange}
+                value={props.auction.buyoutPrice}
+                error={props.errors.buyoutPrice}
+            />
+            <NumberInput
+                id="minBidStep"
+                label="Minimum bid"
+                name="minBidStep"
+                onChange={props.onChange}
+                value={props.auction.minBidStep}
+            />
 
             <div className="form-group">
                 <label htmlFor="deliveryType">Type of delivery</label>
@@ -69,6 +65,11 @@ function AuctionForm(props) {
                         </option>
                     </select>
                 </div>
+                {props.errors.deliveryType && (
+                    <div className="alert alert-danger">
+                        {props.errors.deliveryType}
+                    </div>
+                )}
             </div>
             <input
                 type="submit"

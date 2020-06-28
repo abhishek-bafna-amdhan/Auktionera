@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AuctionForm from "./AuctionForm";
 import Axios from "axios";
+import { toast } from "react-toastify";
 
 const CreateAuctionPage = (props) => {
     const [auction, setAuction] = useState({
@@ -30,6 +31,7 @@ const CreateAuctionPage = (props) => {
         })
             .then(() => {
                 props.history.push("/dashboard");
+                toast.success("Auction created successfully!");
             })
             .catch((err) => {
                 console.log(err);

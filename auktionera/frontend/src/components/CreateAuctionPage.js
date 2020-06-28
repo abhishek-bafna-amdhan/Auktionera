@@ -12,7 +12,7 @@ const CreateAuctionPage = (props) => {
         minBidStep: 0,
     });
 
-    function handleChange({target}) {
+    function handleChange({ target }) {
         setAuction({ ...auction, [target.name]: target.value });
     }
 
@@ -27,7 +27,13 @@ const CreateAuctionPage = (props) => {
             headers: {
                 "Content-Type": "application/json",
             },
-        }).then((res) => {});
+        })
+            .then(() => {
+                props.history.push("/dashboard");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
     return (
         <>

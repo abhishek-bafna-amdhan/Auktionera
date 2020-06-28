@@ -11,12 +11,6 @@ function AuctionForm(props) {
                 name="description"
             />
             <TextInput
-                id="tags"
-                label="Tags"
-                onChange={props.onChange}
-                name="tags"
-            />
-            <TextInput
                 id="category"
                 label="Category"
                 onChange={props.onChange}
@@ -60,9 +54,10 @@ function AuctionForm(props) {
                         id="deliveryType"
                         name="deliveryType"
                         onChange={props.onChange}
-                        value={props.auction.deliveryType}
+                        value={props.auction.deliveryType || ""}
                         className="form-controll"
                     >
+                        <option value="" />
                         <option value="PICKUPATSELLERHOME">
                             Pick up at seller's home
                         </option>

@@ -41,7 +41,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title("Auktionera")
                 .description("An Auction REST API")
-                .contact(new Contact("Bartek Kozuszek, Petros Tsavdaridis", "https://github.com/Bartekkozuszek/Auktionera", "Bartekkozuszek@gmail.com"))
+                .contact(new Contact("Abhishek Bafna", "https://github.com/Bartekkozuszek/Auktionera", "Bartekkozuszek@gmail.com"))
                 .build();
     }
 }

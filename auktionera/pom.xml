@@ -11,7 +11,7 @@
     <groupId>se.iths</groupId>
     <artifactId>auktionera</artifactId>
     <version>0.0.1</version>
-    <name>auktionera</name>
+    <name>Amdhan Auction</name>
     <description>Auction Api backend</description>
 
     <properties>

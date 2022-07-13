@@ -1,4 +1,8 @@
 1. Ska det finnas en tabell med user i db eller ska den gå via account?
+Should there be a table with users in db or should it go via account?
 2. Kan du göra ett exempel på hur vi använder requestParam Map<string, string> för att sortera och filtrera
 i accountcontroller @GetMapping("api/account/auctions")
+Can you give an example of how we use requestParam Map <string, string> to sort and filter in
+accountcontroller @GetMapping ("api / account / auctions")
 3. Hur tänkte du med images? Hur/var ska vi spara dem?
+What did you think about images? How / where should we save them?
